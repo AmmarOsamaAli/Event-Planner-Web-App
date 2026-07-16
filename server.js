@@ -15,6 +15,9 @@ const passUserToView = require("./middleware/pass-user-to-view.js");
 // controller Imports
 const authController = require("./controllers/auth.controllers.js");
 const indexController = require("./controllers/index.controllers.js");
+const eventController = require("./controllers/event.controllers.js")
+const invitationController = require("./controllers/invitation.controllers.js")
+const attendenceRequestController = require ("./controllers/attendance-request.controllers.js")
 
 
 // Middleware
@@ -44,17 +47,11 @@ app.use(passUserToView)
 
 
 
-
-
-
-
-
-
-
-
-
 // Routes go here
 app.use('/auth',authController)
+app.use('/events', eventController)
+app.use('/', invitationController)
+app.use('/', attendenceRequestController)
 app.use('/',indexController)
 
 
