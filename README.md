@@ -51,8 +51,62 @@ Regular users can browse public events, search and filter events, request to att
 
 ## Database Design
 
+![alt text](./images/ERD.jpg)
 
 ## Routes
+
+### Main
+
+| HTTP Method |     Route      |        View       |
+|:-----------:|:--------------:|:-----------------:|
+|     GET     |       /        |    homepage.ejs   |
+|     GET     |  /dashboard    |    dashboard.ejs   |
+|     GET     |   /profile     |    profile.ejs   |
+|     GET     | /auth/sign-in  | /auth/sign-in.ejs |
+|     POST    | /auth/sign-in  |        None       |
+|     GET     | /auth/sign-up  | /auth/sign-up.ejs |
+|     POST    | /auth/sign-up  |        None       |
+|     POST    | /auth/sign-out |        None       |
+
+
+### Events
+
+| HTTP Method |       Route                        |         View                 |
+|:-----------:|:----------------------------------:|:----------------------------:|
+|     GET     | /events                            |  /events/index.ejs           |
+|     GET     | /events/new                        |   /events/new.ejs            |
+|     POST    | /events                            |         None                 |
+|     GET     | /events/created-events             | /events/created-events.ejs   |
+|     GET     | /events/attending-events           | /events/attending-events.ejs |
+|     GET     | /events/:eventId                   | /events/details.ejs          |
+|     GET     | /events/:eventId/edit              |   /events/edit.ejs           |
+|     PUT     | /events/:eventId                   |         None                 |
+|    DELETE   | /events/:eventId                   |         None                 |
+|    DELETE   | /events/:eventId/attendees/me      |         None                 |
+|    DELETE   | /events/:eventId/attendees/:userId |         None                 |
+
+
+### Invitations
+
+| HTTP Method |             Route                |           View           |
+|:-----------:|:--------------------------------:|:------------------------:|
+|     GET     | /invitations                     |  /invitations/index.ejs  |
+|     GET     | /events/:eventId/invitations/new |   /invitations/new.ejs   |
+|     POST    | /events/:eventId/invitations     |           None           |
+|     PUT     | /invitations/:id/accept          |           None           |
+|     PUT     | /invitations/:id/decline         |           None           |
+|    DELETE   | /invitations/:id                 |           None           |
+
+### Attendance Requests
+
+| HTTP Method |               Route                        |                View              |
+|:-----------:|:------------------------------------------:|:--------------------------------:|
+|     GET     | /attendance-requests                       |  /attendance-requests/index.ejs  |
+|     GET     | /events/:eventId/attendance-requests/new   |   /attendance-requests/new.ejs   |
+|     POST    | /events/:eventId/attendance-requests       |                None              |
+|     PUT     | /attendance-requests/:id/accept            |                None              |
+|     PUT     | /attendance-requests/:id/decline           |                None              |
+|    DELETE   | /attendance-requests/:id                   |                None              |
 
 
 ## Features
