@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Events</title>
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+    
+    <h1>My Events</h1>
+
+    <% for(let oneEvent of events) { %>
+            <a href="/events/<%= oneEvent._id %>"><p>Title: <%= oneEvent.title %></p></a>
+            <p>Description: <%= oneEvent.description %></p>
+            <p>Categories: <%= oneEvent.categories %></p>
+            <p>Date: <%= oneEvent.date.toLocaleDateString('en-GB')
+                + ", " + oneEvent.date.toLocaleTimeString() %></p>
+            <P>Capactiy: <%= oneEvent.capacity %></P>
+            <p>Event Planner: <%= oneEvent.eventPlanner.username %></p>
+            <hr>
+            <form method="get" action="/events/<%= oneEvent._id %>/edit">
+                <button>Edit Event</button>
+            </form>
+            <form method="post" action="/events/<%= oneEvent._id %>?_method=DELETE">
+                <button>Delete Event</button>
+            </form>
+    <% } %>
+</body>
+</html>

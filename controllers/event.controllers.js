@@ -1,5 +1,6 @@
 const router = require("express").Router()
 const Event = require("../models/Event")
+const isSignedIn = require("../middleware/is-signed-in");
 
 // GET All Events Page
 router.get('/', async (req,res)=>{
@@ -8,11 +9,11 @@ router.get('/', async (req,res)=>{
 })
 
 // GET Create Event Page
-router.get('/new', (req,res)=>{
+router.get('/new', isSignedIn ,(req,res)=>{
     res.render('events/new.ejs')
 })
 
-router.post('/', async (req,res)=>{
+router.post('/', isSignedIn ,async (req,res)=>{
     try {
         req.body.isPublic = Boolean(req.body.isPublic)
         let submittedCategories = req.body.categories
@@ -41,12 +42,12 @@ router.post('/', async (req,res)=>{
     
 })
 
-router.get('/:eventId/edit', async (req,res)=>{
+router.get('/:eventId/edit', isSignedIn ,async (req,res)=>{
     const foundEvent = await Event.findById(req.params.eventId)
     res.render('events/edit.ejs', {events: foundEvent})
 })
 
-router.put('/:eventId', async (req,res)=>{
+router.put('/:eventId', isSignedIn ,async (req,res)=>{
     req.body.isPublic = Boolean(req.body.isPublic)
     let submittedCategories = req.body.categories
         if(submittedCategories === undefined){
@@ -68,12 +69,22 @@ router.put('/:eventId', async (req,res)=>{
     res.redirect('/events')
 })
 
-router.delete('/:eventId', async (req,res)=>{
+router.delete('/:eventId', isSignedIn ,async (req,res)=>{
     const deletedEvent = await Event.findByIdAndDelete(req.params.eventId)
     res.redirect('/events')
 })
 
-router.get ('/:eventId', async (req,res)=>{
+router.get('/my-events', isSignedIn ,async (req,res)=>{
+    const myEvent = await Event.find({eventPlanner: req.session.user._id})
+    res.render('events/my-events.ejs', {events: myEvent})
+})
+
+router.get('/attending-events', isSignedIn ,async (req,res)=>{
+    const myEvent = await Event.find()  // ADD EVEnts where you are in attendee List
+    res.render('events/attending-events.ejs', {events: myEvent})
+})
+
+router.get ('/:eventId', isSignedIn ,async (req,res)=>{
     const foundEvent = await Event.findById(req.params.eventId).populate("eventPlanner")
     res.render('events/details.ejs', {events: foundEvent})
 })
