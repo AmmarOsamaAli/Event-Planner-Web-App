@@ -12,13 +12,13 @@
 
     <% for(let oneEvent of events) { %>
             <% if(oneEvent.isPublic) { %>
-            <p>Title: <%= oneEvent.title %></p>
+            <a href="/events/<%= oneEvent._id %>"><p>Title: <%= oneEvent.title %></p></a>
             <p>Description: <%= oneEvent.description %></p>
             <p>Categories: <%= oneEvent.categories %></p>
             <p>Date: <%= oneEvent.date.toLocaleDateString()
                 + ", " + oneEvent.date.toLocaleTimeString() %></p>
-            <P>Capactiy: <%= oneEvent.capactiy %></P>
-            <p>Event Planner <%= oneEvent.eventPlanner.username %></p>
+            <P>Capactiy: <%= oneEvent.capacity %></P>
+            <p>Event Planner: <%= oneEvent.eventPlanner.username %></p>
             <hr>
         <% } %>
     <% } %>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Details </title>
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+
+    <h1>Event Details</h1>
+
+    <p>Title: <%= events.title %></p></a>
+    <p>Description: <%= events.description %></p>
+        <% if(events.isPublic){ %>
+            <p>Is the Event Public? Yes</p> 
+        <% } else { %>
+            <p>Is the Event Public? No</p>
+        <% } %>
+    
+    <p>Location: <%= events.location %></p>
+    <p>Categories: <%= events.categories %></p>
+    <p>Date: <%= events.date.toLocaleDateString()
+        + ", " + events.date.toLocaleTimeString() %></p>
+    <P>Capactiy: <%= events.capacity %></P>
+    <p>Event Planner: <%= events.eventPlanner.username %></p>
+    <p>Attendee List: <%= events.attendeesList %></p>
+
+</body>
+</html>

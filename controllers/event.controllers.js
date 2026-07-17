@@ -41,5 +41,10 @@ router.post('/', async (req,res)=>{
     
 })
 
+router.get ('/:eventId', async (req,res)=>{
+    const foundEvent = await Event.findById(req.params.eventId).populate("eventPlanner")
+    res.render('events/details.ejs', {events: foundEvent})
+})
+
 
 module.exports = router;
