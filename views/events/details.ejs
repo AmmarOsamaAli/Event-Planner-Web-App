@@ -20,7 +20,7 @@
     
     <p>Location: <%= events.location %></p>
     <p>Categories: <%= events.categories %></p>
-    <p>Date: <%= events.date.toLocaleDateString()
+    <p>Date: <%= events.date.toLocaleDateString('en-GB')
         + ", " + events.date.toLocaleTimeString() %></p>
     <P>Capactiy: <%= events.capacity %></P>
     <p>Event Planner: <%= events.eventPlanner.username %></p>

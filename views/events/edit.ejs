@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/events/new.css">
+    <title>Edit Event</title>
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+    
+    <h1>Edit Event</h1>
+    <form method="post" action="/events/<%= events._id %>?_method=PUT">
+
+        <label for="title">Title</label>
+        <input value="<%= events.title %>" required id="title" name="title" type="text" maxlength="100">
+
+        <label for="description">Description</label>
+        <textarea  id="description" name="description" maxlength="1000"><%= events.description %></textarea>
+
+        <label for="image">Image</label>
+        <input id="image" name="image" type="url">
+
+        <label for="isPublic">Is The Event Public?</label>
+        <select required name="isPublic" id="isPublic">
+            <option <%= events.isPublic ? "selected" : "" %> value="true">Yes</option>
+            <option <%= events.isPublic ? "selected" : "" %> value="">No</option>
+        </select>
+        <fieldset>
+            <legend>Choose Appropriate Categories for Your Event</legend>
+            <label for="sports">Sports</label>
+            <input type="checkbox" name="categories" id="sports" value="sports" 
+             <%= events.categories.includes('sports') ? "checked" : "" %> 
+            >
+
+            <label for="wedding">Wedding</label>
+            <input type="checkbox" name="categories" id="wedding"  value="wedding"
+             <%= events.categories.includes('wedding') ? "checked" : "" %> 
+            >
+
+            <label for="birthday-party">Birthday Party</label>
+            <input type="checkbox" name="categories" id="birthday-party" value="birthday-party"
+             <%= events.categories.includes('birthday-party') ? "checked" : "" %> 
+            >
+
+            <label for="graduation-party">Graduation Party</label>
+            <input type="checkbox" name="categories" id="graduation-party" value="graduation-party"
+             <%= events.categories.includes('graduation-party') ? "checked" : "" %> 
+            >
+
+            <label for="college">College</label>
+            <input type="checkbox" name="categories" id="college" value="college"
+             <%= events.categories.includes('college') ? "checked" : "" %> 
+            >
+
+            <label for="business">Business</label>
+            <input type="checkbox" name="categories" id="business" value="business"
+             <%= events.categories.includes('business') ? "checked" : "" %> 
+            >
+
+            <label for="tech">Tech</label>
+            <input type="checkbox" name="categories" id="tech" value="tech"
+             <%= events.categories.includes('tech') ? "checked" : "" %> 
+            >
+        </fieldset>
+
+        <label for="date">Date / Time</label>
+        <input value="<%= events.date %>" required id="date" name="date" type="datetime-local">
+
+        <label for="location">Location</label>
+        <input value="<%= events.location %>" required id="location" name="location" type="text">
+
+        <label for="capacity">Maximum Attendees</label>
+        <input value="<%= events.capacity %>" required id="capacity" name="capacity" type="number" min="5" step="1">
+
+        <button>Update Event</button>
+
+    </form>
+
+</body>
+</html>

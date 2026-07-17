@@ -41,6 +41,38 @@ router.post('/', async (req,res)=>{
     
 })
 
+router.get('/:eventId/edit', async (req,res)=>{
+    const foundEvent = await Event.findById(req.params.eventId)
+    res.render('events/edit.ejs', {events: foundEvent})
+})
+
+router.put('/:eventId', async (req,res)=>{
+    req.body.isPublic = Boolean(req.body.isPublic)
+    let submittedCategories = req.body.categories
+        if(submittedCategories === undefined){
+            return res.status(400).send("Please select at least one category")
+        }
+        if(!Array.isArray(submittedCategories))
+            submittedCategories = [submittedCategories]
+        
+    const updatedEvent = await Event.findByIdAndUpdate(req.params.eventId, {
+        title: req.body.title,
+        description: req.body.description,
+        image: req.body.image,
+        isPublic: req.body.isPublic,
+        categories: submittedCategories,
+        date: new Date(req.body.date),
+        location: req.body.location,
+        capacity: req.body.capacity,
+    })
+    res.redirect('/events')
+})
+
+router.delete('/:eventId', async (req,res)=>{
+    const deletedEvent = await Event.findByIdAndDelete(req.params.eventId)
+    res.redirect('/events')
+})
+
 router.get ('/:eventId', async (req,res)=>{
     const foundEvent = await Event.findById(req.params.eventId).populate("eventPlanner")
     res.render('events/details.ejs', {events: foundEvent})
