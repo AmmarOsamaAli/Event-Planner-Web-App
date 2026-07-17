@@ -8,6 +8,13 @@
 <body>
     <%- include('./partials/navbar') %>
 
-    <h1>Welcome to my Website</h1>
+    <h1>Welcome to Evently</h1>
+    <p>Your One Stop To All Events in Bahrain</p>
+    <form method="post" action="/events">
+        <button>See All Public Events</button>
+    </form>
+    <form method="post" action="/events/new">
+        <button>Create Your Own Event</button>
+    </form>
 </body>
 </html>

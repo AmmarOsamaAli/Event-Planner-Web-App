@@ -25,19 +25,19 @@ router.post("/sign-up", async (req, res) => {
   // validation logic
 
   const user = await User.create(req.body);
-  res.redirect("/auth/sign-in");
+  res.redirect("/auth/log-in");
 });
 
 
 
 // Sign in routes
-router.get("/sign-in", (req, res) => {
-  res.render("auth/sign-in.ejs");
+router.get("/log-in", (req, res) => {
+  res.render("auth/log-in.ejs");
 });
 
 
 
-router.post("/sign-in", async (req, res) => {
+router.post("/log-in", async (req, res) => {
   // First, get the user from the database
   const userInDatabase = await User.findOne({ username: req.body.username });
   if (!userInDatabase) {
