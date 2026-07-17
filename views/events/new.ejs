@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/events/new.css">
+    <title>Create Event</title>
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+    
+    <h1>Create Event</h1>
+    
+    <form method="post" action="/events">
+
+        <label for="title">Title</label>
+        <input required id="title" name="title" type="text" maxlength="100">
+
+        <label for="description">Description</label>
+        <textarea id="description" name="description" type="text" maxlength="1000"></textarea>
+
+        <label for="image">Image</label>
+        <input id="image" name="image" type="url">
+
+        <label for="isPublic">Is The Event Public?</label>
+        <select required name="isPublic" id="isPublic">
+            <option value="true">Yes</option>
+            <option value="">No</option>
+        </select>
+        <fieldset>
+            <legend>Choose Appropriate Categories for Your Event</legend>
+            <label for="sports">Sports</label>
+            <input type="checkbox" name="categories" id="sports" value="sports" >
+
+            <label for="wedding">Wedding</label>
+            <input type="checkbox" name="categories" id="wedding"  value="wedding">
+
+            <label for="birthday-party">Birthday Party</label>
+            <input type="checkbox" name="categories" id="birthday-party" value="birthday-party">
+
+            <label for="graduation-party">Graduation Party</label>
+            <input type="checkbox" name="categories" id="graduation-party" value="graduation-party">
+
+            <label for="college">College</label>
+            <input type="checkbox" name="categories" id="college" value="college">
+
+            <label for="business">Business</label>
+            <input type="checkbox" name="categories" id="business" value="business">
+
+            <label for="tech">Tech</label>
+            <input type="checkbox" name="categories" id="tech" value="tech">
+        </fieldset>
+
+        <label for="date">Date / Time</label>
+        <input required id="date" name="date" type="datetime-local">
+
+        <label for="location">Location</label>
+        <input required id="location" name="location" type="text">
+
+        <label for="capacity">Maximum Attendees</label>
+        <input required id="capacity" name="capacity" type="number" min="5" step="1">
+
+        <button>Create Event</button>
+    </form>
+</body>
+</html>

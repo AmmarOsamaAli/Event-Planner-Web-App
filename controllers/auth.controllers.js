@@ -65,7 +65,7 @@ router.post("/log-in", async (req, res) => {
 });
 
 
-router.get("/sign-out", (req, res) => {
+router.get("/log-out", (req, res) => {
   req.session.destroy();
   res.redirect("/");
 });

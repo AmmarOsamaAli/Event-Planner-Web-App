@@ -11,3 +11,10 @@ nav{
     align-items: center;
     height: 50px;
 }
+
+
+
+form{
+    display: flex;
+    flex-direction: column;
+}
