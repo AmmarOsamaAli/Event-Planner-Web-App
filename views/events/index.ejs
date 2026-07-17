@@ -9,5 +9,18 @@
     <%- include('../partials/navbar') %>
     
     <h1>All Events</h1>
+
+    <% for(let oneEvent of events) { %>
+            <% if(oneEvent.isPublic) { %>
+            <p>Title: <%= oneEvent.title %></p>
+            <p>Description: <%= oneEvent.description %></p>
+            <p>Categories: <%= oneEvent.categories %></p>
+            <p>Date: <%= oneEvent.date.toLocaleDateString()
+                + ", " + oneEvent.date.toLocaleTimeString() %></p>
+            <P>Capactiy: <%= oneEvent.capactiy %></P>
+            <p>Event Planner <%= oneEvent.eventPlanner.username %></p>
+            <hr>
+        <% } %>
+    <% } %>
 </body>
 </html>
