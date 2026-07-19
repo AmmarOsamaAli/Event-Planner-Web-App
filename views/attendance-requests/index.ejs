@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendence Requests</title>
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+    
+    <h1>Attendence Requests</h1>
+
+    <% for(let oneRequests of requests) { %>
+        <p>Attendence Request To Event: <%= oneRequests.event.title %></p>
+        <p>Attendence Request From: <%= oneRequests.participant.username %></p>
+        <p>Message: <%= oneRequests.message %></p>
+        <form method="post" action="/attendance-requests/<%= oneRequests._id %>/accept?_method=PUT">
+            <button>Accept</button>
+        </form>
+        <form method="post" action="/attendance-requests/<%= oneRequests._id %>/decline?_method=PUT">
+            <button>Decline</button>
+        </form>
+        <hr>
+    <% } %>
+</body>
+</html>

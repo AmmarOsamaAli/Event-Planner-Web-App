@@ -38,7 +38,7 @@ const eventSchema = new mongoose.Schema({
     capacity: {
         type: Number,
         required: true,
-        min: 5,
+        // min: 5,
     },
     attendeesList: [{
         type: mongoose.Schema.Types.ObjectId,

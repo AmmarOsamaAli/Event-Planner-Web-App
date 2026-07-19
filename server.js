@@ -49,9 +49,9 @@ app.use(passUserToView)
 
 // Routes go here
 app.use('/auth',authController)
-app.use('/events', eventController)
-app.use('/', invitationController)
 app.use('/', attendenceRequestController)
+app.use('/', invitationController)
+app.use('/events', eventController)
 app.use('/',indexController)
 
 

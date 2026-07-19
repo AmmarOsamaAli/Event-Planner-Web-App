@@ -88,24 +88,25 @@ Regular users can browse public events, search and filter events, request to att
 
 ### Invitations
 
-| HTTP Method |             Route                |           View           |
-|:-----------:|:--------------------------------:|:------------------------:|
-|     GET     | /invitations                     |  invitations/index.ejs  |
+| HTTP Method |             Route                |           View          |
+|:-----------:|:--------------------------------:|:-----------------------:|
+|     GET     | /events/invitations              |  invitations/index.ejs  |
 |     GET     | /events/:eventId/invitations/new |   invitations/new.ejs   |
-|     POST    | /events/:eventId/invitations     |           None           |
-|     PUT     | /invitations/:id/accept          |           None           |
-|     PUT     | /invitations/:id/decline         |           None           |
-|    DELETE   | /invitations/:id                 |           None           |
+|     POST    | /events/:eventId/invitations     |           None          |
+|     PUT     | /invitations/:id/accept          |           None          |
+|     PUT     | /invitations/:id/decline         |           None          |
+|    DELETE   | /invitations/:id                 |           None          |
 
 ### Attendance Requests
 
 | HTTP Method |               Route                        |                View              |
 |:-----------:|:------------------------------------------:|:--------------------------------:|
-|     GET     | /attendance-requests                       |  attendance-requests/index.ejs  |
-|     GET     | /events/:eventId/attendance-requests/new   |   attendance-requests/new.ejs   |
+|     GET     | /events/attendance-requests                |  attendance-requests/index.ejs   |
+|     GET     | /events/:eventId/attendance-requests/new   |   attendance-requests/new.ejs    |
 |     POST    | /events/:eventId/attendance-requests       |                None              |
-|     PUT     | /attendance-requests/:id/accept            |                None              |
-|     PUT     | /attendance-requests/:id/decline           |                None              |
+|     PUT     | /attendance-requests/:requestId/accept     |                None              |
+|     PUT     | /attendance-requests/:requestId/decline    |                None              |
+|     PUT     | /attendance-requests/:requestId/waitlist   |                None              |
 |    DELETE   | /attendance-requests/:id                   |                None              |
 
 
