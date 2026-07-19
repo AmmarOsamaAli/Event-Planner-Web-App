@@ -4,7 +4,9 @@ const isSignedIn = require("../middleware/is-signed-in");
 
 // GET All Events Page
 router.get('/', async (req,res)=>{
-    const allEvents = await Event.find().populate('eventPlanner')
+    const allEvents = await Event.find(
+        {isPublic: true, eventPlanner: {$ne: req.session.user._id}}
+    ).populate('eventPlanner')
     res.render('events/index.ejs', {events: allEvents})
 })
 

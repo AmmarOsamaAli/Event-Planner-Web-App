@@ -24,7 +24,7 @@
         <label for="isPublic">Is The Event Public?</label>
         <select required name="isPublic" id="isPublic">
             <option <%= events.isPublic ? "selected" : "" %> value="true">Yes</option>
-            <option <%= events.isPublic ? "selected" : "" %> value="">No</option>
+            <option <%= events.isPublic ? "" : "selected" %> value="">No</option>
         </select>
         <fieldset>
             <legend>Choose Appropriate Categories for Your Event</legend>
