@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendence Request</title>
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+    
+    <h1>Send Attendence Request</h1>
+
+    <form method="post" action="/events/<%= events._id %>/attendance-requests">
+
+        <p>Title: <%= events.title %></p></a>
+        <p>Description: <%= events.description %></p>
+        <p>Location: <%= events.location %></p>
+        <p>Categories: <%= events.categories %></p>
+        <p>Date: <%= events.date.toLocaleDateString('en-GB')
+            + ", " + events.date.toLocaleTimeString() %></p>
+
+        <label for="message">Request Message</label>
+        <textarea id="message" name="message"></textarea>
+
+        <button>Submit Request</button>
+
+    </form>
+</body>
+</html>
