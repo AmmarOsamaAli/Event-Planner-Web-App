@@ -39,9 +39,19 @@
         <% } %>
 
         <hr>
+        <hr>
         <% } %>
     <% } %>
 
     <h2>Sent Requests</h2>
+    <% for(let oneRequests of requests) { %>
+        <% if(!oneRequests.event.eventPlanner.equals(user._id)) {%>
+            <p>Attendence Request To Event: <%= oneRequests.event.title %></p>
+            <p>Attendence Request From: <%= oneRequests.participant.username %></p>
+            <p>Message: <%= oneRequests.message %></p>
+            <p>Status: <%= oneRequests.status %></p>
+            <hr>
+        <% } %>
+    <% } %>
 </body>
 </html>

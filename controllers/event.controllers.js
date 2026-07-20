@@ -88,8 +88,13 @@ router.get('/attending-events', isSignedIn ,async (req,res)=>{
 })
 
 router.get ('/:eventId', isSignedIn ,async (req,res)=>{
-    const foundEvent = await Event.findById(req.params.eventId).populate("eventPlanner")
-    res.render('events/details.ejs', {events: foundEvent})
+    const foundEvent = await Event.findById(req.params.eventId).populate("eventPlanner attendeesList")
+    const foundRequest = await ParticipationRequest.find({
+        event: foundEvent._id,
+        type: "attendanceRequest",
+        status: "waitlisted"
+    }).populate("participant")
+    res.render('events/details.ejs', {events: foundEvent, requests: foundRequest })
 })
 
 

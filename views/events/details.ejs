@@ -19,9 +19,29 @@
     <P>Capactiy: <%= events.capacity %></P>
     <p>Event Planner: <%= events.eventPlanner.username %></p>
 
-    <form method="get" action="/events/<%= events._id %>/attendance-requests/new">
-        <button>Send Attendence Request</button>
-    </form>
+    <% if(events.eventPlanner.equals(user._id)) {%>
+        <p>Attendee List: </p>
+            <ol>
+                <% for(let oneAttendee of events.attendeesList) { %>
+                    <li><p></p><%= oneAttendee.username %></li></p>
+                <% } %>
+            </ol>
+        <p>WaitList</p> 
+            <ol>
+                <% for(let oneAttendeeWaitlisted of requests) { %>
+                    <% if(oneAttendeeWaitlisted.status === "waitlisted") {%>
+                        <li><p></p><%= oneAttendeeWaitlisted.participant.username %></li></p>
+                        <form method="get" action="/events/attendance-requests">
+                            <button>Accept Request</button>
+                        </form>
+                    <% } %>
+                <% } %>
+            </ol>   
+    <% } else { %>
+        <form method="get" action="/events/<%= events._id %>/attendance-requests/new">
+            <button>Send Attendence Request</button>
+        </form>
+    <% } %>
 
 </body>
 </html>
