@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Invitation</title>
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+    
+    <h1>Send Invitation</h1>
+
+    <form method="post" action="/events/<%= events._id %>/invitations">
+
+        <p>Title: <%= events.title %></p></a>
+        <p>Description: <%= events.description %></p>
+        <p>Location: <%= events.location %></p>
+        <p>Categories: <%= events.categories %></p>
+        <p>Date: <%= events.date.toLocaleDateString('en-GB')
+            + ", " + events.date.toLocaleTimeString() %></p>
+
+        <label for="participant">Who Do You Want To Invite?</label>
+        <select name="participant" id="participant">
+        <% for(let oneUser of users) { %>
+            <option value="<%= oneUser._id %>"><%= oneUser.username %></option>
+        <% } %>
+        </select>
+        <br>
+        <br>
+        
+        <label for="message">Invite Message</label>
+        <textarea id="message" name="message" maxlength="500"></textarea>
+
+        <button>Send Invitation</button>
+
+    </form>
+</body>
+</html>

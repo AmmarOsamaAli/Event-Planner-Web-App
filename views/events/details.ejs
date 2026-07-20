@@ -18,6 +18,12 @@
         + ", " + events.date.toLocaleTimeString() %></p>
     <P>Capactiy: <%= events.capacity %></P>
     <p>Event Planner: <%= events.eventPlanner.username %></p>
+    
+    <% if(!events.isPublic) { %>
+        <form method="get" action="/events/<%= events._id %>/invitations/new">
+            <button>Send Invitations</button>
+        </form>
+    <% } %>
 
     <% if(events.eventPlanner._id.equals(user._id)) {%>
         <p>Attendee List: </p>
