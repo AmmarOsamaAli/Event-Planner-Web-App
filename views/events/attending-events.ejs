@@ -20,6 +20,9 @@
             <form method="get" action="/events/<%= oneEvent._id %>">
                 <button>Event Details</button>
             </form>
+            <form method="post" action="/events/<%= oneEvent._id %>/leave?_method=DELETE">
+                <button>Leave Event</button>
+            </form>
         <% } %>
     <% } %>
 </body>

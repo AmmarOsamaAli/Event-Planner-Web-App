@@ -82,7 +82,7 @@ Regular users can browse public events, search and filter events, request to att
 |     GET     | /events/:eventId/edit              |   events/edit.ejs           |
 |     PUT     | /events/:eventId                   |         None                |
 |    DELETE   | /events/:eventId                   |         None                |
-|    DELETE   | /events/:eventId/attendees/me      |         None                |
+|    DELETE   | /events/:eventId/leave             |         None                |
 
 
 ### Invitations
@@ -105,8 +105,7 @@ Regular users can browse public events, search and filter events, request to att
 |     POST    | /events/:eventId/attendance-requests       |                None              |
 |     PUT     | /attendance-requests/:requestId/accept     |                None              |
 |     PUT     | /attendance-requests/:requestId/decline    |                None              |
-|    DELETE   | /attendance-requests/:requestId/cancel     |         None                     |
-|    DELETE   | /attendance-requests/:id                   |                None              |
+|    DELETE   | /attendance-requests/:requestId/cancel     |                None              |
 
 
 ## Features

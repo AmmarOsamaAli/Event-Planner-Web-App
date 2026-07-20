@@ -77,6 +77,42 @@ router.delete('/:eventId', isSignedIn ,async (req,res)=>{
     res.redirect('/events')
 })
 
+router.delete('/:eventId/leave', isSignedIn ,async (req,res)=>{
+    const currentUserId = req.session.user._id
+    const foundEvent = await Event.findById(req.params.eventId)
+
+    if(!foundEvent){
+        res.redirect('/events/attending-events')
+    }
+
+    const isAttending = foundEvent.attendeesList.some(oneObjectId => {
+            return oneObjectId.equals(currentUserId)
+        })
+
+    if(isAttending){
+        foundEvent.attendeesList =  foundEvent.attendeesList.filter(oneObjectId => {
+            return !oneObjectId.equals(currentUserId)
+        })
+
+        await foundEvent.save()
+
+        
+        const foundRequest = await ParticipationRequest.findOne({
+            event: foundEvent._id,
+            participant: req.session.user._id,
+            type: "attendanceRequest",
+            status: "accepted"
+        })
+
+        if(foundRequest){
+            foundRequest.status = "declined"
+            await foundRequest.save()
+        }  
+    }
+    
+    res.redirect('/events/attending-events')
+})
+
 router.get('/my-events', isSignedIn ,async (req,res)=>{
     const myEvent = await Event.find({eventPlanner: req.session.user._id})
     res.render('events/my-events.ejs', {events: myEvent})
@@ -84,7 +120,7 @@ router.get('/my-events', isSignedIn ,async (req,res)=>{
 
 router.get('/attending-events', isSignedIn ,async (req,res)=>{
     const currentUser = req.session.user._id
-    const myEvent = await Event.find({attendeesList: currentUser}).populate("eventPlanner")  
+    const myEvent = await Event.find({attendeesList: currentUser}).populate("eventPlanner attendeesList")  
     res.render('events/attending-events.ejs', {events: myEvent, user: req.session.user})
 })
 
