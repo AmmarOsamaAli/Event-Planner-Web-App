@@ -45,14 +45,19 @@
 
     <h2>Sent Requests</h2>
     <% for(let oneRequests of requests) { %>
-        <% if(!oneRequests.event.eventPlanner.equals(user._id)) {%>
-            <p>Attendence Request To Event: <%= oneRequests.event.title %></p>
-            <p>Attendence Request From: <%= oneRequests.participant.username %></p>
-            <p>Message: <%= oneRequests.message %></p>
-            <p>Status: <%= oneRequests.status %></p>
-            <form method="post" action="/attendance-requests/<%= oneRequests._id %>/cancel?_method=DELETE">
-                <button>Cancel Request</button>
-            </form>
+        <% if(oneRequests.participant.equals(user._id)) {%>
+                <p>Attendence Request To Event: <%= oneRequests.event.title %></p>
+                <p>Message: <%= oneRequests.message %></p>
+                <p>Status: <%= oneRequests.status %></p>
+                <% if(oneRequests.status === "pending" || oneRequests.status === "waitlisted" ) {%>
+                <form method="post" action="/attendance-requests/<%= oneRequests._id %>/cancel?_method=DELETE">
+                    <button>Cancel Request</button>
+                </form>
+            <% } else if (oneRequests.status === "declined") { %>
+                <form method="get" action="/events/<%= oneRequests.event._id %>/attendance-requests/new">
+                    <button>Send Attendence Request Again</button>
+                </form>
+            <% } %> 
             <hr>
         <% } %>
     <% } %>

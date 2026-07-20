@@ -94,7 +94,14 @@ router.get ('/:eventId', isSignedIn ,async (req,res)=>{
         type: "attendanceRequest",
         status: "waitlisted"
     }).populate("participant")
-    res.render('events/details.ejs', {events: foundEvent, requests: foundRequest })
+
+    const userRequest = await ParticipationRequest.findOne({
+        event: foundEvent._id,
+        participant: req.session.user._id,
+        type: 'attendanceRequest',
+    })
+
+    res.render('events/details.ejs', {events: foundEvent, requests: foundRequest, userRequest: userRequest })
 })
 
 

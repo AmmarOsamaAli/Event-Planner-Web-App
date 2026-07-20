@@ -10,7 +10,7 @@
 
     <h1>Event Details</h1>
 
-    <p>Title: <%= events.title %></p></a>
+    <p>Title: <%= events.title %></p>
     <p>Description: <%= events.description %></p>
     <p>Location: <%= events.location %></p>
     <p>Categories: <%= events.categories %></p>
@@ -19,29 +19,36 @@
     <P>Capactiy: <%= events.capacity %></P>
     <p>Event Planner: <%= events.eventPlanner.username %></p>
 
-    <% if(events.eventPlanner.equals(user._id)) {%>
+    <% if(events.eventPlanner._id.equals(user._id)) {%>
         <p>Attendee List: </p>
             <ol>
                 <% for(let oneAttendee of events.attendeesList) { %>
-                    <li><p></p><%= oneAttendee.username %></li></p>
+                    <li><%= oneAttendee.username %></li>
                 <% } %>
             </ol>
         <p>WaitList</p> 
             <ol>
                 <% for(let oneAttendeeWaitlisted of requests) { %>
-                    <% if(oneAttendeeWaitlisted.status === "waitlisted") {%>
-                        <li><p></p><%= oneAttendeeWaitlisted.participant.username %></li></p>
+                        <li><%= oneAttendeeWaitlisted.participant.username %></li>
                         <form method="get" action="/events/attendance-requests">
                             <button>Accept Request</button>
                         </form>
-                    <% } %>
                 <% } %>
             </ol>   
     <% } else { %>
-        <form method="get" action="/events/<%= events._id %>/attendance-requests/new">
-            <button>Send Attendence Request</button>
-        </form>
-    <% } %>
+        <% if(!userRequest) { %>
+            <form method="get" action="/events/<%= events._id %>/attendance-requests/new">
+                <button>Send Attendence Request</button>
+            </form>
+        <% } else if (userRequest.status ==="pending" || userRequest.status === "waitlisted"|| userRequest.status ==="accepted" ){ %>
+                <p>Request Status: <%= userRequest.status %></p>
+        <% } else if(userRequest.status ==="declined") { %>
+                <p>Request Status: <%= userRequest.status %></p>
+                <form method="get" action="/events/<%= events._id %>/attendance-requests/new">
+                    <button>Send Attendence Request Again</button>
+                </form>
+            <% } %> 
+        <% } %>
 
 </body>
 </html>
