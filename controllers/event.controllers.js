@@ -74,7 +74,7 @@ router.put('/:eventId', isSignedIn ,async (req,res)=>{
 
 router.delete('/:eventId', isSignedIn ,async (req,res)=>{
     const deletedEvent = await Event.findByIdAndDelete(req.params.eventId)
-    res.redirect('/events')
+    res.redirect('/events/my-events')
 })
 
 router.delete('/:eventId/leave', isSignedIn ,async (req,res)=>{

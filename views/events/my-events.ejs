@@ -9,7 +9,9 @@
     <%- include('../partials/navbar') %>
     
     <h1>My Events</h1>
-
+    <% if(events.length === 0){ %>
+        <p> You Have Not Created Any Event</p>
+    <% } %>
     <% for(let oneEvent of events) { %>
         <a href="/events/<%= oneEvent._id %>"><p>Title: <%= oneEvent.title %></p></a>
         <p>Description: <%= oneEvent.description %></p>

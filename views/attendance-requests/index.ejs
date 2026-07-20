@@ -11,54 +11,63 @@
     <h1>Attendence Requests</h1>
 
     <h2>Received Requests</h2>
-    <% for(let oneRequests of requests) { %>
-        <% if(oneRequests.event.eventPlanner.equals(user._id)) {%>
-        <p>Attendence Request To Event: <%= oneRequests.event.title %></p>
-        <p>Attendence Request From: <%= oneRequests.participant.username %></p>
-        <p>Message: <%= oneRequests.message %></p>
-        <p>Status: <%= oneRequests.status %></p>
-        <% if(oneRequests.status === "declined") { %>
-        <form method="post" action="/attendance-requests/<%= oneRequests._id %>/accept?_method=PUT">
-            <button>Accept</button>
-        </form>
-        <% } %>
 
-        <% if(oneRequests.status === "waitlisted" || oneRequests.status === "pending") { %>
-        <form method="post" action="/attendance-requests/<%= oneRequests._id %>/accept?_method=PUT">
-            <button>Accept</button>
-        </form>
-        <form method="post" action="/attendance-requests/<%= oneRequests._id %>/decline?_method=PUT">
-            <button>Decline</button>
-        </form>
-         <% } %>
+    <% if (receivedRequests.length === 0) { %>
+        <p>You Have Not Received Any Attendance Requests.</p>
+    <% } else { %>
+        <% for(let oneRequests of requests) { %>
+            <% if(oneRequests.event.eventPlanner.equals(user._id)) {%>
+            <p>Attendence Request To Event: <%= oneRequests.event.title %></p>
+            <p>Attendence Request From: <%= oneRequests.participant.username %></p>
+            <p>Message: <%= oneRequests.message %></p>
+            <p>Status: <%= oneRequests.status %></p>
+            <% if(oneRequests.status === "declined") { %>
+            <form method="post" action="/attendance-requests/<%= oneRequests._id %>/accept?_method=PUT">
+                <button>Accept</button>
+            </form>
+            <% } %>
 
-         <% if(oneRequests.status === "accepted") { %>
-        <form method="post" action="/attendance-requests/<%= oneRequests._id %>/decline?_method=PUT">
-            <button>Decline</button>
-        </form>
-        <% } %>
+            <% if(oneRequests.status === "waitlisted" || oneRequests.status === "pending") { %>
+            <form method="post" action="/attendance-requests/<%= oneRequests._id %>/accept?_method=PUT">
+                <button>Accept</button>
+            </form>
+            <form method="post" action="/attendance-requests/<%= oneRequests._id %>/decline?_method=PUT">
+                <button>Decline</button>
+            </form>
+            <% } %>
 
-        <hr>
-        <hr>
+            <% if(oneRequests.status === "accepted") { %>
+            <form method="post" action="/attendance-requests/<%= oneRequests._id %>/decline?_method=PUT">
+                <button>Decline</button>
+            </form>
+            <% } %>
+
+            <hr>
+            <hr>
+            <% } %>
         <% } %>
     <% } %>
 
     <h2>Sent Requests</h2>
-    <% for(let oneRequests of requests) { %>
-        <% if(oneRequests.participant.equals(user._id)) {%>
-                <p>Attendence Request To Event: <%= oneRequests.event.title %></p>
-                <p>Message: <%= oneRequests.message %></p>
-                <p>Status: <%= oneRequests.status %></p>
-                <% if(oneRequests.status === "pending" || oneRequests.status === "waitlisted" ) {%>
-                <form method="post" action="/attendance-requests/<%= oneRequests._id %>/cancel?_method=DELETE">
-                    <button>Cancel Request</button>
-                </form>
-            <% } else if (oneRequests.status === "declined") { %>
-                <form method="get" action="/events/<%= oneRequests.event._id %>/attendance-requests/new">
-                    <button>Send Attendence Request Again</button>
-                </form>
-            <% } %> 
-            <hr>
+    <% if (sentRequests.length === 0) { %>
+        <p>You Have Not Sent Any Attendance Requests.</p>
+    <% } else { %>
+        <% for(let oneRequests of requests) { %>
+            <% if(oneRequests.participant.equals(user._id)) {%>
+                    <p>Attendence Request To Event: <%= oneRequests.event.title %></p>
+                    <p>Message: <%= oneRequests.message %></p>
+                    <p>Status: <%= oneRequests.status %></p>
+                    <% if(oneRequests.status === "pending" || oneRequests.status === "waitlisted" ) {%>
+                    <form method="post" action="/attendance-requests/<%= oneRequests._id %>/cancel?_method=DELETE">
+                        <button>Cancel Request</button>
+                    </form>
+                <% } else if (oneRequests.status === "declined") { %>
+                    <form method="get" action="/events/<%= oneRequests.event._id %>/attendance-requests/new">
+                        <button>Send Attendence Request Again</button>
+                    </form>
+                <% } %> 
+                <hr>
+            <% } %>
         <% } %>
     <% } %>
 </body>

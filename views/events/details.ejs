@@ -21,12 +21,19 @@
 
     <% if(events.eventPlanner._id.equals(user._id)) {%>
         <p>Attendee List: </p>
-            <ol>
-                <% for(let oneAttendee of events.attendeesList) { %>
-                    <li><%= oneAttendee.username %></li>
-                <% } %>
-            </ol>
-        <p>WaitList</p> 
+        <% if (events.attendeesList.length === 0) { %>
+            <p>No attendees have been accepted yet.</p>
+            <% } else { %>
+                <ol>
+                    <% for(let oneAttendee of events.attendeesList) { %>
+                        <li><%= oneAttendee.username %></li>
+                    <% } %>
+                </ol>
+        <% } %>
+        <p>WaitList</p>
+        <% if (requests.length === 0) { %>
+            <p>No users are currently waitlisted.</p>
+        <% } else { %>
             <ol>
                 <% for(let oneAttendeeWaitlisted of requests) { %>
                         <li><%= oneAttendeeWaitlisted.participant.username %></li>
@@ -34,7 +41,8 @@
                             <button>Accept Request</button>
                         </form>
                 <% } %>
-            </ol>   
+            </ol> 
+        <% } %>  
     <% } else { %>
         <% if(!userRequest) { %>
             <form method="get" action="/events/<%= events._id %>/attendance-requests/new">
@@ -49,6 +57,5 @@
                 </form>
             <% } %> 
         <% } %>
-
 </body>
 </html>
