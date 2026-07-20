@@ -4,8 +4,9 @@ const ParticipationRequest = require("../models/ParticipationRequest")
 const isSignedIn = require("../middleware/is-signed-in");
 
 router.get('/events/attendance-requests', isSignedIn, async (req, res) => {
-    const foundRequest = await ParticipationRequest.find({ type: "attendanceRequest"}).populate("event participant")
-    res.render('attendance-requests/index.ejs', { requests: foundRequest })
+    const foundRequest = await ParticipationRequest.find({ type: "attendanceRequest"}).populate("participant")
+    .populate({path: 'event', populate: {path: 'eventPlanner'}})
+    res.render('attendance-requests/index.ejs', { requests: foundRequest, user: req.session.user })
 })
 
 router.get('/events/:eventId/attendance-requests/new', isSignedIn, async (req, res) => {

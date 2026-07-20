@@ -12,10 +12,14 @@
 
     <h2>Received Requests</h2>
 
+    <% const receivedRequests = requests.filter(oneRequest => {
+        return (oneRequest.event && oneRequest.event.eventPlanner && oneRequest.event.eventPlanner.equals(user._id))
+    }) %>
+
     <% if (receivedRequests.length === 0) { %>
         <p>You Have Not Received Any Attendance Requests.</p>
     <% } else { %>
-        <% for(let oneRequests of requests) { %>
+        <% for(let oneRequests of receivedRequests) { %>
             <% if(oneRequests.event.eventPlanner.equals(user._id)) {%>
             <p>Attendence Request To Event: <%= oneRequests.event.title %></p>
             <p>Attendence Request From: <%= oneRequests.participant.username %></p>
@@ -41,18 +45,21 @@
                 <button>Decline</button>
             </form>
             <% } %>
-
-            <hr>
-            <hr>
             <% } %>
+            <hr>
         <% } %>
     <% } %>
 
     <h2>Sent Requests</h2>
+
+    <% const sentRequests = requests.filter(oneRequest => {
+        return (oneRequest.event && oneRequest.participant && oneRequest.participant.equals(user._id))
+    }) %>   
+
     <% if (sentRequests.length === 0) { %>
         <p>You Have Not Sent Any Attendance Requests.</p>
     <% } else { %>
-        <% for(let oneRequests of requests) { %>
+        <% for(let oneRequests of sentRequests) { %>
             <% if(oneRequests.participant.equals(user._id)) {%>
                     <p>Attendence Request To Event: <%= oneRequests.event.title %></p>
                     <p>Message: <%= oneRequests.message %></p>
