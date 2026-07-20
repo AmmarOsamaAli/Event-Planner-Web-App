@@ -50,6 +50,9 @@
             <p>Attendence Request From: <%= oneRequests.participant.username %></p>
             <p>Message: <%= oneRequests.message %></p>
             <p>Status: <%= oneRequests.status %></p>
+            <form method="post" action="/attendance-requests/<%= oneRequests._id %>/cancel?_method=DELETE">
+                <button>Cancel Request</button>
+            </form>
             <hr>
         <% } %>
     <% } %>

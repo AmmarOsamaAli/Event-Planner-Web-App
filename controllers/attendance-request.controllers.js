@@ -46,7 +46,7 @@ router.put('/attendance-requests/:requestId/accept', isSignedIn, async (req, res
     res.redirect('/events/attendance-requests')
 })
 
-router.put('/attendance-requests/:requestId/decline', async (req, res) => {
+router.put('/attendance-requests/:requestId/decline', isSignedIn ,async (req, res) => {
     const foundRequest = await ParticipationRequest.findById(req.params.requestId)
     if (foundRequest && foundRequest.status !== "declined" ) {
         const event = await Event.findById(foundRequest.event)
@@ -60,6 +60,16 @@ router.put('/attendance-requests/:requestId/decline', async (req, res) => {
             }
             const updatedDeclineRequest = await ParticipationRequest.findByIdAndUpdate(
             req.params.requestId, { status: "declined" }, { new: true, runValidators: true })
+        }
+    }
+    res.redirect('/events/attendance-requests')
+})
+
+router.delete('/attendance-requests/:requestId/cancel', isSignedIn ,async (req,res)=>{
+    const foundRequest = await ParticipationRequest.findById(req.params.requestId)
+    if(foundRequest && foundRequest.participant.equals(req.session.user._id)){
+        if(foundRequest.status === "pending" || foundRequest.status === "waitlisted"){
+            const deleteRequest = await ParticipationRequest.findByIdAndDelete(req.params.requestId)
         }
     }
     res.redirect('/events/attendance-requests')
