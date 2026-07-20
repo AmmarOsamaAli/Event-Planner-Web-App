@@ -76,7 +76,7 @@ Regular users can browse public events, search and filter events, request to att
 |     GET     | /events                            |  events/index.ejs           |
 |     GET     | /events/new                        |   events/new.ejs            |
 |     POST    | /events                            |         None                |
-|     GET     | /events/created-events             | events/created-events.ejs   |
+|     GET     | /events/my-events                  | events/my-events.ejs        |
 |     GET     | /events/attending-events           | events/attending-events.ejs |
 |     GET     | /events/:eventId                   | events/details.ejs          |
 |     GET     | /events/:eventId/edit              |   events/edit.ejs           |
@@ -92,9 +92,9 @@ Regular users can browse public events, search and filter events, request to att
 |     GET     | /events/invitations              |  invitations/index.ejs  |
 |     GET     | /events/:eventId/invitations/new |   invitations/new.ejs   |
 |     POST    | /events/:eventId/invitations     |           None          |
-|     PUT     | /invitations/:id/accept          |           None          |
-|     PUT     | /invitations/:id/decline         |           None          |
-|    DELETE   | /invitations/:id                 |           None          |
+|     PUT     | /invitations/:inviteId/accept    |           None          |
+|     PUT     | /invitations/:inviteId/decline   |           None          |
+|    DELETE   | /invitations/:inviteId/cancel    |                None              |
 
 ### Attendance Requests
 

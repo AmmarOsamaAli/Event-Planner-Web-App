@@ -1,6 +1,7 @@
 const router = require("express").Router()
 const Event = require("../models/Event")
 const ParticipationRequest = require("../models/ParticipationRequest")
+const User = require('../models/User.js')
 const isSignedIn = require("../middleware/is-signed-in");
 
 router.get('/events/attendance-requests', isSignedIn, async (req, res) => {
