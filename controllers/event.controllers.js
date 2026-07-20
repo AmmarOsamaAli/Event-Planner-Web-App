@@ -83,8 +83,9 @@ router.get('/my-events', isSignedIn ,async (req,res)=>{
 })
 
 router.get('/attending-events', isSignedIn ,async (req,res)=>{
-    const myEvent = await Event.find()  // ADD EVEnts where you are in attendee List
-    res.render('events/attending-events.ejs', {events: myEvent})
+    const currentUser = req.session.user._id
+    const myEvent = await Event.find({attendeesList: currentUser}).populate("eventPlanner")  
+    res.render('events/attending-events.ejs', {events: myEvent, user: req.session.user})
 })
 
 router.get ('/:eventId', isSignedIn ,async (req,res)=>{

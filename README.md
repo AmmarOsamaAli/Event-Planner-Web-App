@@ -71,19 +71,18 @@ Regular users can browse public events, search and filter events, request to att
 
 ### Events
 
-| HTTP Method |       Route                        |         View                 |
-|:-----------:|:----------------------------------:|:----------------------------:|
+| HTTP Method |       Route                        |         View                |
+|:-----------:|:----------------------------------:|:---------------------------:|
 |     GET     | /events                            |  events/index.ejs           |
 |     GET     | /events/new                        |   events/new.ejs            |
-|     POST    | /events                            |         None                 |
+|     POST    | /events                            |         None                |
 |     GET     | /events/created-events             | events/created-events.ejs   |
 |     GET     | /events/attending-events           | events/attending-events.ejs |
 |     GET     | /events/:eventId                   | events/details.ejs          |
 |     GET     | /events/:eventId/edit              |   events/edit.ejs           |
-|     PUT     | /events/:eventId                   |         None                 |
-|    DELETE   | /events/:eventId                   |         None                 |
-|    DELETE   | /events/:eventId/attendees/me      |         None                 |
-|    DELETE   | /events/:eventId/attendees/:userId |         None                 |
+|     PUT     | /events/:eventId                   |         None                |
+|    DELETE   | /events/:eventId                   |         None                |
+|    DELETE   | /events/:eventId/attendees/me      |         None                |
 
 
 ### Invitations
@@ -106,7 +105,7 @@ Regular users can browse public events, search and filter events, request to att
 |     POST    | /events/:eventId/attendance-requests       |                None              |
 |     PUT     | /attendance-requests/:requestId/accept     |                None              |
 |     PUT     | /attendance-requests/:requestId/decline    |                None              |
-|     PUT     | /attendance-requests/:requestId/waitlist   |                None              |
+|    DELETE   | /attendance-requests/:requestId/cancel     |         None                     |
 |    DELETE   | /attendance-requests/:id                   |                None              |
 
 

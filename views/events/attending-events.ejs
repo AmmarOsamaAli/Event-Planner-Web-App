@@ -9,5 +9,18 @@
     <%- include('../partials/navbar') %>
     
     <h1>Events Im Attending</h1>
+    <% if(events.length === 0){ %>
+        <p> You are not currently attending any events. </p>
+    <% } else { %>
+        <% for(let oneEvent of events) { %>
+            <p>Title: <%= oneEvent.title %></p>
+            <p>Description: <%= oneEvent.description %></p>
+            <p>Date: <%= oneEvent.date.toLocaleDateString('en-GB')
+                + ", " + oneEvent.date.toLocaleTimeString() %></p>
+            <form method="get" action="/events/<%= oneEvent._id %>">
+                <button>Event Details</button>
+            </form>
+        <% } %>
+    <% } %>
 </body>
 </html>
