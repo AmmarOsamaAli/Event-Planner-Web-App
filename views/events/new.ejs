@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/events/new.css">
     <title>Create Event</title>
 </head>
 <body>
@@ -11,7 +10,7 @@
     
     <h1>Create Event</h1>
     
-    <form method="post" action="/events">
+    <form method="post" action="/events" enctype="multipart/form-data">
 
         <label for="title">Title</label>
         <input required id="title" name="title" type="text" maxlength="100">
@@ -20,7 +19,7 @@
         <textarea id="description" name="description" type="text" maxlength="1000"></textarea>
 
         <label for="image">Image</label>
-        <input id="image" name="image" type="url">
+        <input required id="image" name="image" type="file" accept="image/*">
 
         <label for="isPublic">Is The Event Public?</label>
         <select required name="isPublic" id="isPublic">

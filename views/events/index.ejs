@@ -11,6 +11,7 @@
     <h1>All Events</h1>
 
     <% for(let oneEvent of events) { %>
+        <img src="<%= oneEvent.image %>">
         <a href="/events/<%= oneEvent._id %>"><p>Title: <%= oneEvent.title %></p></a>
         <p>Description: <%= oneEvent.description %></p>
         <p>Categories: <%= oneEvent.categories %></p>

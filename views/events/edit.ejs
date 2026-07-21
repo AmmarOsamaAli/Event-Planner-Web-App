@@ -10,7 +10,7 @@
     <%- include('../partials/navbar') %>
     
     <h1>Edit Event</h1>
-    <form method="post" action="/events/<%= events._id %>?_method=PUT">
+    <form method="post" action="/events/<%= events._id %>?_method=PUT" enctype="multipart/form-data">
 
         <label for="title">Title</label>
         <input value="<%= events.title %>" required id="title" name="title" type="text" maxlength="100">
@@ -19,7 +19,7 @@
         <textarea  id="description" name="description" maxlength="1000"><%= events.description %></textarea>
 
         <label for="image">Image</label>
-        <input id="image" name="image" type="url">
+        <input required id="image" name="image" type="file" accept="image/*">
 
         <label for="isPublic">Is The Event Public?</label>
         <select required name="isPublic" id="isPublic">

@@ -13,6 +13,7 @@
         <p> You Are Not Currently Attending Any Events. </p>
     <% } else { %>
         <% for(let oneEvent of events) { %>
+            <img src="<%= oneEvent.image %>">
             <p>Title: <%= oneEvent.title %></p>
             <p>Description: <%= oneEvent.description %></p>
             <p>Date: <%= oneEvent.date.toLocaleDateString('en-GB')

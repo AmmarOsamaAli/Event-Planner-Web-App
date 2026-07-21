@@ -18,7 +18,7 @@ router.get('/events/:eventId/attendance-requests/new', isSignedIn, async (req, r
 router.put('/attendance-requests/:requestId/accept', isSignedIn, async (req, res) => {
     const foundRequest = await ParticipationRequest.findById(req.params.requestId)
     if (foundRequest &&
-        (foundRequest.status === "pending" || foundRequest.status === "waitlisted") &&
+        (foundRequest.status === "pending" || foundRequest.status === "waitlisted" || foundRequest.status === "declined") &&
         foundRequest.type === "attendanceRequest") {
         const foundEvent = await Event.findById(foundRequest.event)
         if (foundEvent && foundEvent.eventPlanner.equals(req.session.user._id)) {

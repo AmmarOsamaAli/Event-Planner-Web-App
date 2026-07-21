@@ -98,7 +98,7 @@ router.post('/events/:eventId/invitations', isSignedIn, async (req, res) => {
 router.put('/invitations/:inviteId/accept', isSignedIn, async (req, res) => {
     const foundRequest = await ParticipationRequest.findById(req.params.inviteId)
     if (foundRequest &&
-        (foundRequest.status === "pending" || foundRequest.status === "waitlisted") &&
+        (foundRequest.status === "pending" || foundRequest.status === "waitlisted" || foundRequest.status === "declined") &&
         foundRequest.type === "invitation") {
         const foundEvent = await Event.findById(foundRequest.event)
         if (foundEvent && foundRequest.participant.equals(req.session.user._id)) {

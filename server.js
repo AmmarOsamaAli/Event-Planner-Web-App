@@ -5,6 +5,7 @@ const dotenv = require("dotenv").config() //this allows me to use my .env values
 const morgan = require('morgan')
 const session = require('express-session');
 const methodOverride = require('method-override')
+const multer = require("multer")
 const {MongoStore} = require("connect-mongo");
 const connectToDB = require('./db.js')
 
