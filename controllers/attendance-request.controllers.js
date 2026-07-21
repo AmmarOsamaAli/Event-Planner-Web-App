@@ -1,126 +1,197 @@
 const router = require("express").Router()
 const Event = require("../models/Event")
 const ParticipationRequest = require("../models/ParticipationRequest")
-const User = require('../models/User.js')
 const isSignedIn = require("../middleware/is-signed-in");
 
 router.get('/events/attendance-requests', isSignedIn, async (req, res) => {
-    const foundRequest = await ParticipationRequest.find({ type: "attendanceRequest" }).populate("participant")
-        .populate({ path: 'event', populate: { path: 'eventPlanner' } })
-    res.render('attendance-requests/index.ejs', { requests: foundRequest, user: req.session.user })
+    try {
+        const ownedEvents = await Event.find({
+            eventPlanner: req.session.user._id
+        }).select("_id")
+
+        const ownedEventIds = ownedEvents.map(event => event._id)
+
+        const foundRequest = await ParticipationRequest.find({
+            type: "attendanceRequest",
+            $or: [
+                { participant: req.session.user._id },
+                { event: { $in: ownedEventIds } }
+            ]
+        }).populate("participant").populate({ path: 'event', populate: { path: 'eventPlanner' } })
+        res.render('attendance-requests/index.ejs', { requests: foundRequest, user: req.session.user })
+
+    } catch (error) {
+        console.log("Error:", error)
+        return res.status(500).send("Could not get requests")
+    }
 })
 
 router.get('/events/:eventId/attendance-requests/new', isSignedIn, async (req, res) => {
-    const foundEvent = await Event.findById(req.params.eventId)
-    res.render('attendance-requests/new.ejs', { events: foundEvent })
+    try {
+        const foundEvent = await Event.findById(req.params.eventId)
+
+        if (!foundEvent) {
+            return res.redirect("/events")
+        }
+
+        if (!foundEvent.isPublic) {
+            return res.status(403).send(
+                "Attendance requests cannot be submitted for private events"
+            )
+        }
+
+        if (foundEvent.eventPlanner.equals(req.session.user._id)) {
+            return res.status(400).send(
+                "You cannot request attendance for your own event"
+            )
+        }
+        res.render('attendance-requests/new.ejs', { events: foundEvent })
+
+    } catch (error) {
+        console.log("Error:", error)
+        return res.status(500).send("Could not get send request page")
+    }
 })
 
 router.put('/attendance-requests/:requestId/accept', isSignedIn, async (req, res) => {
-    const foundRequest = await ParticipationRequest.findById(req.params.requestId)
-    if (foundRequest &&
-        (foundRequest.status === "pending" || foundRequest.status === "waitlisted" || foundRequest.status === "declined") &&
-        foundRequest.type === "attendanceRequest") {
-        const foundEvent = await Event.findById(foundRequest.event)
-        if (foundEvent && foundEvent.eventPlanner.equals(req.session.user._id)) {
-            let isAlreadyAttending = false
-            for (let oneObjectId of foundEvent.attendeesList) {
-                if (oneObjectId.equals(foundRequest.participant)) {
-                    isAlreadyAttending = true
-                    break
+    try {
+        const foundRequest = await ParticipationRequest.findById(req.params.requestId)
+        if (foundRequest &&
+            (foundRequest.status === "pending" || foundRequest.status === "waitlisted" || foundRequest.status === "declined") &&
+            foundRequest.type === "attendanceRequest") {
+            const foundEvent = await Event.findById(foundRequest.event)
+            if (foundEvent && foundEvent.eventPlanner.equals(req.session.user._id)) {
+                let isAlreadyAttending = false
+                for (let oneObjectId of foundEvent.attendeesList) {
+                    if (oneObjectId.equals(foundRequest.participant)) {
+                        isAlreadyAttending = true
+                        break
+                    }
                 }
-            }
-            if (isAlreadyAttending) {
-                const updatedRequest = await ParticipationRequest.findByIdAndUpdate(
-                    req.params.requestId, { status: "accepted" }, { new: true, runValidators: true })
-            }
-            else if (foundEvent.attendeesList.length < foundEvent.capacity) {
-                foundEvent.attendeesList.push(foundRequest.participant)
-                await foundEvent.save()
-                const updatedAcceptRequest = await ParticipationRequest.findByIdAndUpdate(
-                    req.params.requestId, { status: "accepted" }, { new: true, runValidators: true })
-            }
-            else {
-                const updatedWaitlistRequest = await ParticipationRequest.findByIdAndUpdate(
-                    req.params.requestId, { status: "waitlisted" }, { new: true, runValidators: true })
-            }
+                if (isAlreadyAttending) {
+                    await ParticipationRequest.findByIdAndUpdate(
+                        req.params.requestId, { status: "accepted" }, { new: true, runValidators: true })
+                }
+                else if (foundEvent.attendeesList.length < foundEvent.capacity) {
+                    foundEvent.attendeesList.push(foundRequest.participant)
+                    await foundEvent.save()
+                    await ParticipationRequest.findByIdAndUpdate(
+                        req.params.requestId, { status: "accepted" }, { new: true, runValidators: true })
+                }
+                else {
+                    await ParticipationRequest.findByIdAndUpdate(
+                        req.params.requestId, { status: "waitlisted" }, { new: true, runValidators: true })
+                }
 
+            }
         }
+        res.redirect('/events/attendance-requests')
+
+    } catch (error) {
+        console.log("Error:", error)
+        return res.status(500).send("Could not accept request")
     }
-    res.redirect('/events/attendance-requests')
 })
 
 router.put('/attendance-requests/:requestId/decline', isSignedIn, async (req, res) => {
-    const foundRequest = await ParticipationRequest.findById(req.params.requestId)
-    if (foundRequest && foundRequest.status !== "declined" && foundRequest.type === "attendanceRequest") {
-        const foundEvent = await Event.findById(foundRequest.event)
-        if (foundEvent && foundEvent.eventPlanner.equals(req.session.user._id)) {
-            if (foundRequest.status === "accepted") {
-                foundEvent.attendeesList = foundEvent.attendeesList.filter(oneObjectId => {
-                    return !oneObjectId.equals(foundRequest.participant)
-                })
+    try {
+        const foundRequest = await ParticipationRequest.findById(req.params.requestId)
+        if (foundRequest && foundRequest.status !== "declined" && foundRequest.type === "attendanceRequest") {
+            const foundEvent = await Event.findById(foundRequest.event)
+            if (foundEvent && foundEvent.eventPlanner.equals(req.session.user._id)) {
+                if (foundRequest.status === "accepted") {
+                    foundEvent.attendeesList = foundEvent.attendeesList.filter(oneObjectId => {
+                        return !oneObjectId.equals(foundRequest.participant)
+                    })
 
-                await foundEvent.save()
+                    await foundEvent.save()
+                }
+                await ParticipationRequest.findByIdAndUpdate(
+                    req.params.requestId, { status: "declined" }, { new: true, runValidators: true })
             }
-            const updatedDeclineRequest = await ParticipationRequest.findByIdAndUpdate(
-                req.params.requestId, { status: "declined" }, { new: true, runValidators: true })
         }
+        res.redirect('/events/attendance-requests')
+
+    } catch (error) {
+        console.log("Error:", error)
+        return res.status(500).send("Could not decline request")
     }
-    res.redirect('/events/attendance-requests')
 })
 
 router.delete('/attendance-requests/:requestId/cancel', isSignedIn, async (req, res) => {
-    const foundRequest = await ParticipationRequest.findById(req.params.requestId)
-    if (foundRequest && foundRequest.type === "attendanceRequest" && foundRequest.participant.equals(req.session.user._id)) {
-        if (foundRequest.status === "pending" || foundRequest.status === "waitlisted") {
-            const deleteRequest = await ParticipationRequest.findByIdAndDelete(req.params.requestId)
+    try {
+        const foundRequest = await ParticipationRequest.findById(req.params.requestId)
+        if (foundRequest && foundRequest.type === "attendanceRequest" && foundRequest.participant.equals(req.session.user._id)) {
+            if (foundRequest.status === "pending" || foundRequest.status === "waitlisted") {
+                await ParticipationRequest.findByIdAndDelete(req.params.requestId)
+            }
         }
+        res.redirect('/events/attendance-requests')
+
+    } catch (error) {
+        console.log("Error:", error)
+        return res.status(500).send("Could not cancel request")
     }
-    res.redirect('/events/attendance-requests')
 })
 
 router.post('/events/:eventId/attendance-requests', isSignedIn, async (req, res) => {
-    const foundEvent = await Event.findById(req.params.eventId)
-    if (foundEvent && foundEvent.isPublic && !foundEvent.eventPlanner.equals(req.session.user._id)) {
-        let isAlreadyAttending = foundEvent.attendeesList.some((oneObjectId) => {
-            return oneObjectId.equals(req.session.user._id)
-        })
-
-        const existingRequest = await ParticipationRequest.findOne({
-            participant: req.session.user._id,
-            event: req.params.eventId,
-            type: "attendanceRequest"
-        })
-        if (existingRequest) {
-            if (existingRequest.status === "pending") {
-                return res.status(400).send("You already have a pending request")
-            }
-
-            if (existingRequest.status === "waitlisted") {
-                return res.status(400).send("You are already waitlisted")
-            }
-
-            if (existingRequest.status === "accepted") {
-                return res.status(400).send("Your request was already accepted")
-            }
-            if (existingRequest.status === "declined") {
-                existingRequest.message = req.body.message
-                existingRequest.status = "pending"
-                await existingRequest.save()
-
-                return res.redirect('/events')
-            }
-        }
-        else {
-            await ParticipationRequest.create({
-                message: req.body.message,
-                type: "attendanceRequest",
-                participant: req.session.user._id,
-                event: req.params.eventId
+    try {
+        const foundEvent = await Event.findById(req.params.eventId)
+        if (foundEvent && foundEvent.isPublic && !foundEvent.eventPlanner.equals(req.session.user._id)) {
+            let isAlreadyAttending = foundEvent.attendeesList.some((oneObjectId) => {
+                return oneObjectId.equals(req.session.user._id)
             })
-        }
-    }
 
-    res.redirect('/events')
+            if (isAlreadyAttending) {
+                return res.status(400).send(
+                    "You are already attending this event"
+                )
+            }
+
+            const existingRequest = await ParticipationRequest.findOne({
+                participant: req.session.user._id,
+                event: req.params.eventId,
+            })
+            if (existingRequest) {
+                if (existingRequest.type === "invitation") {
+                    return res.status(400).send(
+                        "You already have an invitation for this event"
+                    )
+                }
+                if (existingRequest.status === "pending") {
+                    return res.status(400).send("You already have a pending request")
+                }
+
+                if (existingRequest.status === "waitlisted") {
+                    return res.status(400).send("You are already waitlisted")
+                }
+
+                if (existingRequest.status === "accepted") {
+                    return res.status(400).send("Your request was already accepted")
+                }
+                if (existingRequest.status === "declined" && existingRequest.type === "attendanceRequest") {
+                    existingRequest.message = req.body.message
+                    existingRequest.status = "pending"
+                    await existingRequest.save()
+
+                    return res.redirect('/events')
+                }
+            }
+            else {
+                await ParticipationRequest.create({
+                    message: req.body.message,
+                    type: "attendanceRequest",
+                    participant: req.session.user._id,
+                    event: req.params.eventId
+                })
+            }
+        }
+        res.redirect('/events')
+
+    } catch (error) {
+        console.log("Error:", error)
+        return res.status(500).send("Could not send attendance request")
+    }
 })
 
 

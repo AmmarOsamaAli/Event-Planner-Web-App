@@ -17,7 +17,7 @@
     }) %>
 
     <% if (receivedRequests.length === 0) { %>
-        <p>You Have Not Received Any Attendance Requests.</p>
+        <p>You have not received any attendance requests.</p>
     <% } else { %>
         <% for(let oneRequests of receivedRequests) { %>
             <% if(oneRequests.event.eventPlanner.equals(user._id)) {%>
@@ -57,7 +57,7 @@
     }) %>   
 
     <% if (sentRequests.length === 0) { %>
-        <p>You Have Not Sent Any Attendance Requests.</p>
+        <p>You have not sent any attendance requests.</p>
     <% } else { %>
         <% for(let oneRequests of sentRequests) { %>
             <% if(oneRequests.participant.equals(user._id)) {%>

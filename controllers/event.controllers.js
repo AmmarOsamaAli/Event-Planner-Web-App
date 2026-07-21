@@ -27,7 +27,7 @@ router.get('/', async (req, res) => {
 
     } catch (error) {
         console.log("Error:", error)
-        return res.status(500).send("Could Not All Events")
+        return res.status(500).send("Could not get all events")
     }
 })
 
@@ -69,7 +69,7 @@ router.post('/', isSignedIn, upload.single("image"), async (req, res) => {
     } catch (error) {
         deleteUploadedFile(req.file)
         console.log("Error:", error)
-        return res.status(500).send("Could Not Create Event")
+        return res.status(500).send("Could not create event")
     }
 
 })
@@ -92,7 +92,7 @@ router.get('/:eventId/edit', isSignedIn, async (req, res) => {
 
     } catch (error) {
         console.log("Error:", error)
-        return res.status(500).send("Could Not Get Edit Event Page")
+        return res.status(500).send("Could not get edit event page")
     }
 })
 
@@ -109,9 +109,7 @@ router.put('/:eventId', isSignedIn, upload.single("image"), async (req, res) => 
 
         if (!foundEvent.eventPlanner.equals(req.session.user._id)) {
             deleteUploadedFile(req.file)
-            return res.status(403).send(
-                "You are not allowed to edit this event"
-            )
+            return res.status(403).send("You are not allowed to edit this event")
         }
 
         req.body.isPublic = Boolean(req.body.isPublic)
@@ -217,7 +215,7 @@ router.delete('/:eventId', isSignedIn, async (req, res) => {
 
     } catch (error) {
         console.log("Error:", error)
-        return res.status(500).send("Could Not Delete Event")
+        return res.status(500).send("Could not delete event")
     }
 })
 
@@ -258,7 +256,7 @@ router.delete('/:eventId/leave', isSignedIn, async (req, res) => {
 
     } catch (error) {
         console.log("Error:", error)
-        return res.status(500).send("Could Not Leave Event")
+        return res.status(500).send("Could not leave event")
     }
 })
 
@@ -271,7 +269,7 @@ router.get('/my-events', isSignedIn, async (req, res) => {
 
     } catch (error) {
         console.log("Error:", error)
-        return res.status(500).send("Could Not Get My Event")
+        return res.status(500).send("Could not get my event")
     }
 })
 
@@ -284,7 +282,7 @@ router.get('/attending-events', isSignedIn, async (req, res) => {
 
     } catch (error) {
         console.log("Error:", error)
-        return res.status(500).send("Could not attending events")
+        return res.status(500).send("Could not get attending events")
     }
 })
 
@@ -336,7 +334,7 @@ router.get('/:eventId', isSignedIn, async (req, res) => {
 
     } catch (error) {
         console.log("Error:", error)
-        return res.status(500).send("Could Not Get Event Details")
+        return res.status(500).send("Could not get event details")
     }
 })
 
