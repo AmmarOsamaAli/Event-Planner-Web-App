@@ -13,16 +13,16 @@
     <h2>Received Invitations</h2>
 
     <% const receivedInvitations = invitations.filter(oneInvitation => {
-        return (oneInvitation.event && oneInvitation.event.eventPlanner && oneInvitation.event.eventPlanner.equals(user._id))
+        return (oneInvitation.event && oneInvitation.event.eventPlanner &&
+        oneInvitation.participant && oneInvitation.participant._id.equals(user._id))
     }) %>
 
     <% if (receivedInvitations.length === 0) { %>
         <p>You Have Not Received Any Invitations.</p>
     <% } else { %>
         <% for(let oneInvitation of receivedInvitations) { %>
-            <% if(oneInvitation.event.eventPlanner.equals(user._id)) {%>
             <p>Invitation To Event: <%= oneInvitation.event.title %></p>
-            <p>Invitation From: <%= oneInvitation.participant.username %></p>
+            <p>Invitation From: <%= oneInvitation.event.eventPlanner.username %></p>
             <p>Message: <%= oneInvitation.message %></p>
             <p>Status: <%= oneInvitation.status %></p>
             <% if(oneInvitation.status === "declined") { %>
@@ -39,13 +39,6 @@
                 <button>Decline</button>
             </form>
             <% } %>
-
-            <% if(oneInvitation.status === "accepted") { %>
-            <form method="post" action="/invitations/<%= oneInvitation._id %>/decline?_method=PUT">
-                <button>Decline</button>
-            </form>
-            <% } %>
-            <% } %>
             <hr>
         <% } %>
     <% } %>
@@ -53,29 +46,29 @@
     <h2>Sent Invitations</h2>
 
     <% const sentInvitations = invitations.filter(oneInvitation => {
-        return (oneInvitation.event && oneInvitation.participant && oneInvitation.participant.equals(user._id))
+        return (oneInvitation.event && oneInvitation.event.eventPlanner && 
+        oneInvitation.participant && oneInvitation.event.eventPlanner._id.equals(user._id))
     }) %>   
 
     <% if (sentInvitations.length === 0) { %>
-        <p>You Have Not Sent Any Attendance Requests.</p>
+        <p>You Have Not Sent Any Invitations.</p>
     <% } else { %>
         <% for(let oneInvitation of sentInvitations) { %>
-            <% if(oneInvitation.participant.equals(user._id)) {%>
-                    <p>Invitation To Event: <%= oneInvitation.event.title %></p>
-                    <p>To: <%= oneInvitation.participant.username %> </p>
-                    <p>Message: <%= oneInvitation.message %></p>
-                    <p>Status: <%= oneInvitation.status %></p>
-                    <% if(oneInvitation.status === "pending" || oneInvitation.status === "waitlisted" ) {%>
-                    <form method="post" action="/invitations/<%= oneInvitation._id %>/cancel?_method=DELETE">
-                        <button>Cancel Request</button>
-                    </form>
-                <% } else if (oneInvitation.status === "declined") { %>
-                    <form method="get" action="/events/<%= oneInvitation.event._id %>/invitations/new">
-                        <button>Send Attendence Request Again</button>
-                    </form>
-                <% } %> 
-                <hr>
+            <p>Invitation To Event: <%= oneInvitation.event.title %></p>
+            <p>To: <%= oneInvitation.participant.username %> </p>
+            <p>Message: <%= oneInvitation.message %></p>
+            <p>Status: <%= oneInvitation.status %></p>
+            <% if(oneInvitation.status === "pending" || oneInvitation.status === "waitlisted" ) {%>
+            <form method="post" action="/invitations/<%= oneInvitation._id %>/cancel?_method=DELETE">
+                <button>Cancel Invitation</button>
+            </form>
             <% } %>
+            <% if (oneInvitation.status === "declined") { %>
+            <form method="get" action="/events/<%= oneInvitation.event._id %>/invitations/new">
+                <button>Send Invitation Again</button>
+            </form>
+            <% } %> 
+            <hr>
         <% } %>
     <% } %>
 

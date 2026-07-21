@@ -5,8 +5,8 @@ const User = require('../models/User.js')
 const isSignedIn = require("../middleware/is-signed-in");
 
 router.get('/events/attendance-requests', isSignedIn, async (req, res) => {
-    const foundRequest = await ParticipationRequest.find({ type: "attendanceRequest"}).populate("participant")
-    .populate({path: 'event', populate: {path: 'eventPlanner'}})
+    const foundRequest = await ParticipationRequest.find({ type: "attendanceRequest" }).populate("participant")
+        .populate({ path: 'event', populate: { path: 'eventPlanner' } })
     res.render('attendance-requests/index.ejs', { requests: foundRequest, user: req.session.user })
 })
 
@@ -17,12 +17,13 @@ router.get('/events/:eventId/attendance-requests/new', isSignedIn, async (req, r
 
 router.put('/attendance-requests/:requestId/accept', isSignedIn, async (req, res) => {
     const foundRequest = await ParticipationRequest.findById(req.params.requestId)
-    if (foundRequest && 
-        (foundRequest.status === "pending" || foundRequest.status === "waitlisted" || foundRequest.status === "declined")) {
-        const event = await Event.findById(foundRequest.event)
-        if (event && event.eventPlanner.equals(req.session.user._id)) {
+    if (foundRequest &&
+        (foundRequest.status === "pending" || foundRequest.status === "waitlisted") &&
+        foundRequest.type === "attendanceRequest") {
+        const foundEvent = await Event.findById(foundRequest.event)
+        if (foundEvent && foundEvent.eventPlanner.equals(req.session.user._id)) {
             let isAlreadyAttending = false
-            for (let oneObjectId of event.attendeesList) {
+            for (let oneObjectId of foundEvent.attendeesList) {
                 if (oneObjectId.equals(foundRequest.participant)) {
                     isAlreadyAttending = true
                     break
@@ -32,9 +33,9 @@ router.put('/attendance-requests/:requestId/accept', isSignedIn, async (req, res
                 const updatedRequest = await ParticipationRequest.findByIdAndUpdate(
                     req.params.requestId, { status: "accepted" }, { new: true, runValidators: true })
             }
-            else if (event.attendeesList.length < event.capacity) {
-                event.attendeesList.push(foundRequest.participant)
-                await event.save()
+            else if (foundEvent.attendeesList.length < foundEvent.capacity) {
+                foundEvent.attendeesList.push(foundRequest.participant)
+                await foundEvent.save()
                 const updatedAcceptRequest = await ParticipationRequest.findByIdAndUpdate(
                     req.params.requestId, { status: "accepted" }, { new: true, runValidators: true })
             }
@@ -48,29 +49,29 @@ router.put('/attendance-requests/:requestId/accept', isSignedIn, async (req, res
     res.redirect('/events/attendance-requests')
 })
 
-router.put('/attendance-requests/:requestId/decline', isSignedIn ,async (req, res) => {
+router.put('/attendance-requests/:requestId/decline', isSignedIn, async (req, res) => {
     const foundRequest = await ParticipationRequest.findById(req.params.requestId)
-    if (foundRequest && foundRequest.status !== "declined" ) {
-        const event = await Event.findById(foundRequest.event)
-        if (event && event.eventPlanner.equals(req.session.user._id)) {
-            if(foundRequest.status === "accepted"){
-                event.attendeesList = event.attendeesList.filter(oneObjectId => {
+    if (foundRequest && foundRequest.status !== "declined" && foundRequest.type === "attendanceRequest") {
+        const foundEvent = await Event.findById(foundRequest.event)
+        if (foundEvent && foundEvent.eventPlanner.equals(req.session.user._id)) {
+            if (foundRequest.status === "accepted") {
+                foundEvent.attendeesList = foundEvent.attendeesList.filter(oneObjectId => {
                     return !oneObjectId.equals(foundRequest.participant)
                 })
 
-                await event.save()
+                await foundEvent.save()
             }
             const updatedDeclineRequest = await ParticipationRequest.findByIdAndUpdate(
-            req.params.requestId, { status: "declined" }, { new: true, runValidators: true })
+                req.params.requestId, { status: "declined" }, { new: true, runValidators: true })
         }
     }
     res.redirect('/events/attendance-requests')
 })
 
-router.delete('/attendance-requests/:requestId/cancel', isSignedIn ,async (req,res)=>{
+router.delete('/attendance-requests/:requestId/cancel', isSignedIn, async (req, res) => {
     const foundRequest = await ParticipationRequest.findById(req.params.requestId)
-    if(foundRequest && foundRequest.participant.equals(req.session.user._id)){
-        if(foundRequest.status === "pending" || foundRequest.status === "waitlisted"){
+    if (foundRequest && foundRequest.type === "attendanceRequest" && foundRequest.participant.equals(req.session.user._id)) {
+        if (foundRequest.status === "pending" || foundRequest.status === "waitlisted") {
             const deleteRequest = await ParticipationRequest.findByIdAndDelete(req.params.requestId)
         }
     }
