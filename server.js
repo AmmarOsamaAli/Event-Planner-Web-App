@@ -46,6 +46,24 @@ app.use(
 app.use(passUserToView)
 
 
+app.use((error, req, res, next) => {
+    if (error instanceof multer.MulterError) {
+        if (error.code === "LIMIT_FILE_SIZE") {
+            return res.status(400).send(
+                "The image must be smaller than 5 MB"
+            )
+        }
+
+        return res.status(400).send(error.message)
+    }
+
+    if (error.message?.includes("Only JPEG")) {
+        return res.status(400).send(error.message)
+    }
+
+    next(error)
+})
+
 
 
 // Routes go here
