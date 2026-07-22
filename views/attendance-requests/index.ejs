@@ -1,81 +1,234 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attendence Requests</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <link rel="icon" type="image/svg+xml" href="/images/logos/icon.svg">
+
+    <title>Attendance Requests</title>
 </head>
-<body>
+
+<body class="min-h-screen bg-slate-50 text-slate-900">
     <%- include('../partials/navbar') %>
-    
-    <h1>Attendence Requests</h1>
+    <main class="mx-auto w-full max-w-7xl px-6 py-10 lg:px-10">
+        <header class="mb-10">
+            <p class="text-sm font-semibold uppercase tracking-[0.2em] text-indigo-600">Event participation</p>
+            <h1 class="mt-3 text-5xl font-extrabold tracking-tight text-slate-900">Attendance Requests</h1>
+            <p class="mt-4 max-w-2xl text-lg leading-8 text-slate-600">
+                Review requests received for your events and track the requests you have sent.
+            </p>
+        </header>
 
-    <h2>Received Requests</h2>
+        <% const receivedRequests=requests.filter(oneRequest=> {
+            return (
+            oneRequest.event &&
+            oneRequest.event.eventPlanner &&
+            oneRequest.event.eventPlanner.equals(user._id)
+            )
+        }) %>
 
-    <% const receivedRequests = requests.filter(oneRequest => {
-        return (oneRequest.event && oneRequest.event.eventPlanner && oneRequest.event.eventPlanner.equals(user._id))
-    }) %>
+        <% const sentRequests=requests.filter(oneRequest=> {
+            return (
+            oneRequest.event &&
+            oneRequest.participant &&
+            oneRequest.participant.equals(user._id)
+            )
+        }) %>
 
-    <% if (receivedRequests.length === 0) { %>
-        <p>You have not received any attendance requests.</p>
-    <% } else { %>
-        <% for(let oneRequests of receivedRequests) { %>
-            <% if(oneRequests.event.eventPlanner.equals(user._id)) {%>
-            <p>Attendence Request To Event: <%= oneRequests.event.title %></p>
-            <p>Attendence Request From: <%= oneRequests.participant.username %></p>
-            <p>Message: <%= oneRequests.message %></p>
-            <p>Status: <%= oneRequests.status %></p>
-            <% if(oneRequests.status === "declined") { %>
-            <form method="post" action="/attendance-requests/<%= oneRequests._id %>/accept?_method=PUT">
-                <button>Accept</button>
-            </form>
-            <% } %>
+        <section class="grid items-start gap-8 lg:grid-cols-2">
+            <section class="rounded-3xl bg-white p-7 shadow-lg ring-1 ring-slate-200">
+                <header class="flex items-center justify-between border-b border-slate-200 pb-5">
+                    <div>
+                        <h2 class="text-3xl font-bold text-slate-900">Received Requests</h2>
+                        <p class="mt-2 text-base text-slate-600">Requests submitted for events you created.</p>
+                    </div>
+                    <span
+                        class="flex h-12 min-w-12 items-center justify-center rounded-full bg-indigo-100 px-3 text-lg font-bold text-indigo-700">
+                        <%= receivedRequests.length %>
+                    </span>
+                </header>
 
-            <% if(oneRequests.status === "waitlisted" || oneRequests.status === "pending") { %>
-            <form method="post" action="/attendance-requests/<%= oneRequests._id %>/accept?_method=PUT">
-                <button>Accept</button>
-            </form>
-            <form method="post" action="/attendance-requests/<%= oneRequests._id %>/decline?_method=PUT">
-                <button>Decline</button>
-            </form>
-            <% } %>
+                <% if (receivedRequests.length===0) { %>
+                    <div class="py-14 text-center">
+                        <div
+                            class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-100 text-3xl">
+                            📥
+                        </div>
 
-            <% if(oneRequests.status === "accepted") { %>
-            <form method="post" action="/attendance-requests/<%= oneRequests._id %>/decline?_method=PUT">
-                <button>Decline</button>
-            </form>
-            <% } %>
-            <% } %>
-            <hr>
-        <% } %>
-    <% } %>
+                        <h3 class="mt-5 text-xl font-bold text-slate-900">No received requests</h3>
+                        <p class="mt-2 text-base text-slate-600">You have not received any attendance requests.</p>
+                    </div>
+                <% } else { %>
 
-    <h2>Sent Requests</h2>
+                    <div class="mt-6 space-y-5">
+                        <% for(let oneRequests of receivedRequests) { %>
+                            <article class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                                <div class="flex flex-wrap items-start justify-between gap-3">
+                                    <div>
+                                        <p class="text-sm font-semibold uppercase tracking-wide text-indigo-600">Request for</p>
+                                        <h3 class="mt-1 text-2xl font-bold text-slate-900"><%= oneRequests.event.title %></h3>
+                                    </div>
 
-    <% const sentRequests = requests.filter(oneRequest => {
-        return (oneRequest.event && oneRequest.participant && oneRequest.participant.equals(user._id))
-    }) %>   
+                                    <span class="rounded-full px-3 py-1.5 text-sm font-semibold capitalize
+                                        <%= oneRequests.status === 'accepted' ? 'bg-emerald-100 text-emerald-700' 
+                                            : oneRequests.status === 'declined'
+                                            ? 'bg-red-100 text-red-700'
+                                            : oneRequests.status === 'waitlisted'
+                                            ? 'bg-amber-100 text-amber-700'
+                                            : 'bg-indigo-100 text-indigo-700' %>">
+                                            <%= oneRequests.status %>
+                                    </span>
+                                </div>
 
-    <% if (sentRequests.length === 0) { %>
-        <p>You have not sent any attendance requests.</p>
-    <% } else { %>
-        <% for(let oneRequests of sentRequests) { %>
-            <% if(oneRequests.participant.equals(user._id)) {%>
-                    <p>Attendence Request To Event: <%= oneRequests.event.title %></p>
-                    <p>Message: <%= oneRequests.message %></p>
-                    <p>Status: <%= oneRequests.status %></p>
-                    <% if(oneRequests.status === "pending" || oneRequests.status === "waitlisted" ) {%>
-                    <form method="post" action="/attendance-requests/<%= oneRequests._id %>/cancel?_method=DELETE">
-                        <button>Cancel Request</button>
-                    </form>
-                <% } else if (oneRequests.status === "declined") { %>
-                    <form method="get" action="/events/<%= oneRequests.event._id %>/attendance-requests/new">
-                        <button>Send Attendence Request Again</button>
-                    </form>
-                <% } %> 
-                <hr>
-            <% } %>
-        <% } %>
-    <% } %>
+                                <div class="mt-5 space-y-3 text-base text-slate-600">
+                                    <p>
+                                        <span class="font-semibold text-slate-800">From:</span>
+                                        <%= oneRequests.participant.username %>
+                                    </p>
+
+                                    <div>
+                                        <p class="font-semibold text-slate-800">Message:</p>
+                                        <p class="mt-1 whitespace-pre-line leading-7">
+                                            <%= oneRequests.message || "No message was included." %>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="mt-6 flex flex-wrap gap-3 border-t border-slate-200 pt-5">
+
+                                    <% if(oneRequests.status==="declined" ) { %>
+                                        <form method="post"
+                                            action="/attendance-requests/<%= oneRequests._id %>/accept?_method=PUT">
+                                            <button type="submit"
+                                                class="cursor-pointer rounded-xl bg-emerald-600 px-5 py-3 font-semibold text-white shadow-sm transition hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-200">
+                                                Accept
+                                            </button>
+                                        </form>
+                                    <% } %>
+
+                                    <% if( oneRequests.status==="waitlisted" ||
+                                        oneRequests.status==="pending" ) { %>
+                                        <form method="post"
+                                            action="/attendance-requests/<%= oneRequests._id %>/accept?_method=PUT">
+                                            <button type="submit"
+                                                class="cursor-pointer rounded-xl bg-emerald-600 px-5 py-3 font-semibold text-white shadow-sm transition hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-200">
+                                                Accept
+                                            </button>
+                                        </form>
+
+                                        <form method="post"
+                                            action="/attendance-requests/<%= oneRequests._id %>/decline?_method=PUT">
+                                            <button type="submit"
+                                                class="cursor-pointer rounded-xl border border-red-200 bg-white px-5 py-3 font-semibold text-red-600 transition hover:bg-red-50 focus:outline-none focus:ring-4 focus:ring-red-100">
+                                                Decline
+                                            </button>
+                                        </form>
+                                    <% } %>
+
+                                    <% if(oneRequests.status==="accepted" ) { %>
+                                        <form method="post"
+                                            action="/attendance-requests/<%= oneRequests._id %>/decline?_method=PUT">
+                                            <button type="submit"
+                                                class="cursor-pointer rounded-xl border border-red-200 bg-white px-5 py-3 font-semibold text-red-600 transition hover:bg-red-50 focus:outline-none focus:ring-4 focus:ring-red-100">
+                                                Decline
+                                            </button>
+                                        </form>
+                                    <% } %>
+                                </div>
+                            </article>
+                        <% } %>
+                    </div>
+                <% } %>
+            </section>
+
+            <section class="rounded-3xl bg-white p-7 shadow-lg ring-1 ring-slate-200">
+                <header class="flex items-center justify-between border-b border-slate-200 pb-5">
+                    <div>
+                        <h2 class="text-3xl font-bold text-slate-900">Sent Requests</h2>
+                        <p class="mt-2 text-base text-slate-600">Requests you submitted to other event planners.</p>
+                    </div>
+                    <span
+                        class="flex h-12 min-w-12 items-center justify-center rounded-full bg-violet-100 px-3 text-lg font-bold text-violet-700">
+                        <%= sentRequests.length %>
+                    </span>
+                </header>
+
+                <% if (sentRequests.length===0) { %>
+                    <div class="py-14 text-center">
+                        <div
+                            class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-100 text-3xl">
+                            📤
+                        </div>
+                        <h3 class="mt-5 text-xl font-bold text-slate-900">No sent requests</h3>
+                        <p class="mt-2 text-base text-slate-600">You have not sent any attendance requests.</p>
+                    </div>
+                <% } else { %>
+                    <div class="mt-6 space-y-5">
+                    <% for(let oneRequests of sentRequests) { %>
+                        <article class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                            <div class="flex flex-wrap items-start justify-between gap-3">
+                                <div>
+                                    <p class="text-sm font-semibold uppercase tracking-wide text-violet-600">
+                                        Request sent to
+                                    </p>
+                                    <h3 class="mt-1 text-2xl font-bold text-slate-900"><%= oneRequests.event.title %></h3>
+                                </div>
+
+                                <span class="rounded-full px-3 py-1.5 text-sm font-semibold capitalize
+                                    <%= oneRequests.status === 'accepted'
+                                        ? 'bg-emerald-100 text-emerald-700'
+                                        : oneRequests.status === 'declined'
+                                        ? 'bg-red-100 text-red-700'
+                                        : oneRequests.status === 'waitlisted'
+                                        ? 'bg-amber-100 text-amber-700'
+                                        : 'bg-indigo-100 text-indigo-700' %>">
+                                        <%= oneRequests.status %>
+                                </span>
+                            </div>
+
+                            <div class="mt-5">
+                                <p class="font-semibold text-slate-800">Message:</p>
+                                <p
+                                    class="mt-1 whitespace-pre-line text-base leading-7 text-slate-600">
+                                    <%= oneRequests.message || "No message was included." %>
+                                </p>
+                            </div>
+
+                            <% if( oneRequests.status==="pending" ||
+                                oneRequests.status==="waitlisted" || oneRequests.status==="declined"
+                                ) { %>
+                                <div
+                                    class="mt-6 flex flex-wrap gap-3 border-t border-slate-200 pt-5">
+                                    <% if( oneRequests.status==="pending" ||
+                                        oneRequests.status==="waitlisted" ) { %>
+                                        <form method="post"
+                                            action="/attendance-requests/<%= oneRequests._id %>/cancel?_method=DELETE">
+                                            <button type="submit"
+                                                class="cursor-pointer rounded-xl border border-red-200 bg-white px-5 py-3 font-semibold text-red-600 transition hover:bg-red-50 focus:outline-none focus:ring-4 focus:ring-red-100">
+                                                Cancel Request
+                                            </button>
+                                        </form>
+                                    <% } else if(oneRequests.status==="declined" ) { %>
+                                        <form method="get"
+                                            action="/events/<%= oneRequests.event._id %>/attendance-requests/new">
+                                            <button type="submit"
+                                                class="cursor-pointer rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white shadow-sm transition hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-200">
+                                                Send Attendance Request Again
+                                            </button>
+                                        </form>
+                                    <% } %>
+                                </div>
+                                <% } %>
+                        </article>
+                    <% } %>
+                    </div>
+                <% } %>
+            </section>
+        </section>
+    </main>
 </body>
 </html>
