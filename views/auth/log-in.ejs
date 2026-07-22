@@ -1,19 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Log In</title>
-  </head>
-  <body>
-    <%- include('../partials/navbar') %>
-    <h1>Log in</h1>
-    <form action="/auth/log-in" method="POST">
-      <label for="username">Username:</label>
-      <input type="text" name="username" id="username" />
-      <label for="password">Password:</label>
-      <input type="password" name="password" id="password" />
-      <button type="submit">Log in</button>
-    </form>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="icon" type="image/svg+xml" href="/images/logos/icon.svg">
+  <title>Log In</title>
+</head>
+
+<body class="relative min-h-screen bg-slate-50 text-slate-900">
+  <%- include('../partials/navbar') %>
+
+  <% if (errorMessage) { %>
+    <div class="absolute left-1/2 top-26 z-40 w-full max-w-5xl -translate-x-1/2 px-6">
+      <div
+        role="alert"
+        class="rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-base font-medium text-red-700 shadow-sm">
+        <%= errorMessage %>
+      </div>
+    </div>
+  <% } %>
+
+
+  <main class="flex min-h-[calc(100vh-5.5rem)] items-center justify-center px-6 py-10">
+    <section
+      class="grid w-full max-w-5xl overflow-hidden rounded-3xl bg-white shadow-xl ring-1 ring-slate-200 lg:grid-cols-2">
+
+      <div
+        class="hidden bg-linear-to-br from-indigo-600 via-violet-600 to-purple-700 p-12 text-white lg:flex lg:flex-col lg:justify-between">
+        <div>
+          <img src="/images/logos/logo-horizontal-dark.svg" alt="Evently" class="h-14 w-auto">
+          <h2 class="mt-12 text-4xl font-bold leading-tight">Welcome back to Evently.</h2>
+          <p class="mt-5 max-w-md text-lg leading-8 text-indigo-100">
+            Log in to manage your events, respond to invitations, review
+            attendance requests, and discover what is happening across Bahrain.
+          </p>
+        </div>
+
+        <p class="text-sm text-indigo-200">Create. Discover. Attend.</p>
+      </div>
+
+      <div class="px-8 py-10 sm:px-12 lg:px-14 lg:py-12">
+        <header>
+          <p class="text-sm font-semibold uppercase tracking-[0.2em] text-indigo-600">Welcome back</p>
+          <h1 class="mt-3 text-4xl font-extrabold tracking-tight text-slate-900">Log in</h1>
+          <p class="mt-3 text-base leading-7 text-slate-600">Enter your account details to continue.</p>
+        </header>
+
+        <form action="/auth/log-in" method="POST" class="mt-8 space-y-6">
+
+          <div>
+            <label for="username" class="mb-2 block text-base font-semibold text-slate-700">Username:</label>
+
+            <input type="text" name="username" id="username"
+              class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3.5 text-base text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100" />
+          </div>
+
+          <div>
+            <label for="password" class="mb-2 block text-base font-semibold text-slate-700">Password:</label>
+
+          <input type="password" name="password" id="password"
+              class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3.5 text-base text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100" />
+          </div>
+
+          <button type="submit"
+            class="w-full rounded-xl bg-indigo-600 px-6 py-4 text-lg font-semibold text-white shadow-md transition duration-200 hover:bg-indigo-700 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-indigo-200">
+            Log in
+          </button>
+
+        </form>
+
+        <p class="mt-6 text-center text-base text-slate-600">Don’t have an account?
+          <a href="/auth/sign-up"class="font-semibold text-indigo-600 transition hover:text-indigo-700 hover:underline">Sign up</a>
+        </p>
+      </div>
+    </section>
+  </main>
+</body>
+
 </html>
