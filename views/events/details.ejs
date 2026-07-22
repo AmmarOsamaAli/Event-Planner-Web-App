@@ -62,11 +62,7 @@
                 </div>
 
                 <section class="mt-7">
-                    <h3 class="text-lg font-bold text-slate-900">
-                        Description
-                    </h3>
-
-                    <p class="mt-2 whitespace-pre-line text-base leading-8 text-slate-600">
+                    <p class="mt-0 text-base leading-8 text-slate-600">
                         <%= events.description %>
                     </p>
                 </section>
@@ -137,8 +133,7 @@
 
                                     <p class="mt-1 text-sm text-slate-500">
                                         <%= events.attendeesList.length %>
-                                            accepted attendee<%= events.attendeesList.length===1 ? ""
-                                                : "s" %>
+                                            Accepted Attendee<%= events.attendeesList.length===1 ? "" : "s" %>
                                     </p>
                                 </div>
 
@@ -181,7 +176,7 @@
                                     class="flex cursor-pointer list-none items-center justify-between px-6 py-5">
                                     <div>
                                         <h3 class="text-lg font-bold text-slate-900">Waitlist</h3>
-                                        <p class="mt-1 text-sm text-slate-500"> <%= requests.length %> waitlisted user<%= requests.length===1 ? "" : "s" %></p>
+                                        <p class="mt-1 text-sm text-slate-500"> <%= requests.length %> Waitlisted User<%= requests.length===1 ? "" : "s" %></p>
                                     </div>
                                     <span class="text-2xl text-slate-500 transition duration-200 group-open:rotate-180">⌄</span>
                                 </summary>
