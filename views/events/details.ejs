@@ -1,67 +1,279 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event Details </title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="icon" type="image/svg+xml" href="/images/logos/icon.svg">
+    <title>Event Details</title>
 </head>
-<body>
+
+<body class="min-h-screen bg-slate-50 text-slate-900">
     <%- include('../partials/navbar') %>
 
-    <h1>Event Details</h1>
-    <img src="<%= events.image %>">
-    <p>Title: <%= events.title %></p>
-    <p>Description: <%= events.description %></p>
-    <p>Location: <%= events.location %></p>
-    <p>Categories: <%= events.categories %></p>
-    <p>Date: <%= events.date.toLocaleDateString('en-GB')
-        + ", " + events.date.toLocaleTimeString() %></p>
-    <P>Capactiy: <%= events.capacity %></P>
-    <p>Event Planner: <%= events.eventPlanner.username %></p>
-    
-    <% if(!events.isPublic) { %>
-        <form method="get" action="/events/<%= events._id %>/invitations/new">
-            <button>Send Invitations</button>
-        </form>
-    <% } %>
+    <main class="mx-auto w-full max-w-7xl px-6 py-10 lg:px-10">
+        <header class="mb-8">
+            <p class="text-sm font-semibold uppercase tracking-[0.2em] text-indigo-600">
+                Event information
+            </p>
 
-    <% if(events.eventPlanner._id.equals(user._id)) {%>
-        <p>Attendee List: </p>
-        <% if (events.attendeesList.length === 0) { %>
-            <p>No attendees have been accepted yet.</p>
-            <% } else { %>
-                <ol>
-                    <% for(let oneAttendee of events.attendeesList) { %>
-                        <li><%= oneAttendee.username %></li>
+            <h1 class="mt-3 text-5xl font-extrabold tracking-tight text-slate-900">
+                Event Details
+            </h1>
+
+            <p class="mt-4 max-w-2xl text-lg leading-8 text-slate-600">
+                View the full event information, attendance status, and available actions.
+            </p>
+        </header>
+
+        <section class="overflow-hidden rounded-3xl bg-white shadow-xl ring-1 ring-slate-200">
+            <div class="aspect-21/8 w-full overflow-hidden bg-slate-200">
+                <img src="<%= events.image %>" alt="<%= events.title %>" class="h-full w-full object-cover"></div>
+
+            <div class="flex flex-col p-8 lg:p-10">
+                <div class="flex flex-wrap items-start justify-between gap-4">
+                    <div>
+                        <div class="mb-4 flex flex-wrap gap-2">
+                            <% for(let category of events.categories) { %>
+                                <span
+                                    class="rounded-full bg-indigo-50 px-3 py-1.5 text-sm font-semibold text-indigo-700">
+                                    <%= category %>
+                                </span>
+                            <% } %>
+                        </div>
+
+                        <h2 class="text-4xl font-extrabold leading-tight tracking-tight text-slate-900">
+                            <%= events.title %>
+                        </h2>
+                    </div>
+
+                    <% if(events.isPublic) { %>
+                        <span
+                            class="rounded-full bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700">
+                            Public Event
+                        </span>
+                        <% } else { %>
+                            <span
+                                class="rounded-full bg-violet-50 px-4 py-2 text-sm font-semibold text-violet-700">
+                                Private Event
+                            </span>
+                        <% } %>
+                </div>
+
+                <section class="mt-7">
+                    <h3 class="text-lg font-bold text-slate-900">
+                        Description
+                    </h3>
+
+                    <p class="mt-2 whitespace-pre-line text-base leading-8 text-slate-600">
+                        <%= events.description %>
+                    </p>
+                </section>
+
+                <section class="mt-8 grid gap-4 rounded-2xl bg-slate-50 p-6 sm:grid-cols-2">
+                    <div>
+                        <p class="text-sm font-semibold uppercase tracking-wide text-slate-500">
+                            Location
+                        </p>
+
+                        <p class="mt-1 text-base font-semibold text-slate-900">
+                            <%= events.location %>
+                        </p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm font-semibold uppercase tracking-wide text-slate-500">
+                            Capacity
+                        </p>
+
+                        <p class="mt-1 text-base font-semibold text-slate-900">
+                            <%= events.capacity %>
+                        </p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm font-semibold uppercase tracking-wide text-slate-500">
+                            Date and Time
+                        </p>
+
+                        <p class="mt-1 text-base font-semibold text-slate-900">
+                            <%= events.date.toLocaleDateString('en-GB') + ", " +
+                                events.date.toLocaleTimeString() %>
+                        </p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm font-semibold uppercase tracking-wide text-slate-500">
+                            Event Planner
+                        </p>
+
+                        <p class="mt-1 text-base font-semibold text-slate-900">
+                            <%= events.eventPlanner.username %>
+                        </p>
+                    </div>
+                </section>
+
+                <% if(events.eventPlanner._id.equals(user._id)) { %>
+
+                    <section class="mt-8 space-y-4">
+                        <% if(!events.isPublic) { %>
+                            <form method="get" action="/events/<%= events._id %>/invitations/new">
+                                <button type="submit"
+                                    class="w-full cursor-pointer rounded-xl bg-indigo-600 px-6 py-4 text-lg font-semibold text-white shadow-md transition duration-200 hover:bg-indigo-700 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-indigo-200">
+                                    Send Invitations
+                                </button>
+                            </form>
+                        <% } %>
+
+                        <details
+                            class="group overflow-hidden rounded-2xl border border-slate-200 bg-white">
+                            <summary
+                                class="flex cursor-pointer list-none items-center justify-between px-6 py-5">
+                                <div>
+                                    <h3 class="text-lg font-bold text-slate-900">
+                                        Attendee List
+                                    </h3>
+
+                                    <p class="mt-1 text-sm text-slate-500">
+                                        <%= events.attendeesList.length %>
+                                            accepted attendee<%= events.attendeesList.length===1 ? ""
+                                                : "s" %>
+                                    </p>
+                                </div>
+
+                                <span
+                                    class="text-2xl text-slate-500 transition duration-200 group-open:rotate-180">
+                                    ⌄
+                                </span>
+                            </summary>
+
+                            <div class="border-t border-slate-200 px-6 py-5">
+                                <% if (events.attendeesList.length===0) { %>
+                                    <p class="text-base text-slate-600">
+                                        No attendees have been accepted yet.
+                                    </p>
+                                <% } else { %>
+                                    <ol class="space-y-3">
+                                        <% for(let oneAttendee of events.attendeesList) { %>
+                                            <li
+                                                class="flex items-center gap-3 rounded-xl bg-slate-50 px-4 py-3">
+                                                <span
+                                                    class="flex h-9 w-9 items-center justify-center rounded-full bg-indigo-100 text-sm font-bold text-indigo-700">
+                                                    <%= oneAttendee.username.charAt(0).toUpperCase()
+                                                        %>
+                                                </span>
+
+                                                <span class="font-semibold text-slate-800">
+                                                    <%= oneAttendee.username %>
+                                                </span>
+                                            </li>
+                                        <% } %>
+                                    </ol>
+                                <% } %>
+                            </div>
+                        </details>
+
+                        <% if(events.isPublic) { %>
+                            <details
+                                class="group overflow-hidden rounded-2xl border border-slate-200 bg-white">
+                                <summary
+                                    class="flex cursor-pointer list-none items-center justify-between px-6 py-5">
+                                    <div>
+                                        <h3 class="text-lg font-bold text-slate-900">Waitlist</h3>
+                                        <p class="mt-1 text-sm text-slate-500"> <%= requests.length %> waitlisted user<%= requests.length===1 ? "" : "s" %></p>
+                                    </div>
+                                    <span class="text-2xl text-slate-500 transition duration-200 group-open:rotate-180">⌄</span>
+                                </summary>
+
+                                <div class="border-t border-slate-200 px-6 py-5">
+                                    <% if (requests.length===0) { %>
+                                        <p class="text-base text-slate-600">
+                                            No users are currently waitlisted.
+                                        </p>
+                                    <% } else { %>
+                                        <ol class="space-y-3">
+                                            <% for(let oneAttendeeWaitlisted of requests) { %>
+                                                <li
+                                                    class="flex flex-col gap-3 rounded-xl bg-slate-50 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
+                                                    <div class="flex items-center gap-3">
+                                                        <span
+                                                            class="flex h-9 w-9 items-center justify-center rounded-full bg-amber-100 text-sm font-bold text-amber-700">
+                                                            <%= oneAttendeeWaitlisted.participant.username.charAt(0).toUpperCase()%>
+                                                        </span>
+
+                                                        <span class="font-semibold text-slate-800">
+                                                            <%= oneAttendeeWaitlisted.participant.username%>
+                                                        </span>
+                                                    </div>
+
+                                                    <form method="get"
+                                                        action="/events/attendance-requests">
+                                                        <button type="submit"
+                                                            class="cursor-pointer rounded-lg bg-amber-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-amber-600 focus:outline-none focus:ring-4 focus:ring-amber-200">
+                                                            Manage Request
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                            <% } %>
+                                        </ol>
+                                    <% } %>
+                                </div>
+                            </details>
+                        <% } %>
+                    </section>
+
+                    <% } else { %>
+
+                        <section class="mt-8">
+                    <% if(events.isPublic) { %>
+                        <% if(!userRequest) { %>
+                            <form method="get"
+                                action="/events/<%= events._id %>/attendance-requests/new">
+                                <button type="submit"
+                                    class="w-full cursor-pointer rounded-xl bg-indigo-600 px-6 py-4 text-lg font-semibold text-white shadow-md transition duration-200 hover:bg-indigo-700 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-indigo-200">
+                                    Send Attendance Request
+                                </button>
+                            </form>
+
+                        <% } else if ( userRequest.status==="pending" ||
+                            userRequest.status==="waitlisted" || userRequest.status==="accepted" ) {%>
+
+                            <div
+                                class="rounded-2xl border border-indigo-200 bg-indigo-50 px-6 py-5">
+                                <p class="text-sm font-semibold uppercase tracking-wide text-indigo-600"> Request  </p>
+                                <p class="mt-2 text-xl font-bold capitalize text-indigo-900"> <%= userRequest.status %> </p>
+                            </div>
+
+                        <% } else if(userRequest.status==="declined" ) { %>
+                            <div class="rounded-2xl border border-red-200 bg-red-50 px-6 py-5">
+                                <p class="text-sm font-semibold uppercase tracking-wide text-red-600"> Request Status</p>
+                                <p class="mt-2 text-xl font-bold capitalize text-red-900"><%= userRequest.status %></p>
+                            </div>
+
+                            <form method="get"
+                                action="/events/<%= events._id %>/attendance-requests/new"
+                                class="mt-4">
+                                <button type="submit"
+                                    class="w-full cursor-pointer rounded-xl bg-indigo-600 px-6 py-4 text-lg font-semibold text-white shadow-md transition duration-200 hover:bg-indigo-700 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-indigo-200">
+                                    Send Attendance Request Again
+                                </button>
+                            </form>
+                        <% } %>
+                    <% } else { %>
+                        <% if(userRequest) { %>
+                            <div
+                                class="rounded-2xl border border-violet-200 bg-violet-50 px-6 py-5">
+                                <p class="text-sm font-semibold uppercase tracking-wide text-violet-600">Invitation Status</p>
+                                <p class="mt-2 text-xl font-bold capitalize text-violet-900"><%= userRequest.status %></p>
+                            </div>
+                        <% } %>
                     <% } %>
-                </ol>
-        <% } %>
-        <p>WaitList</p>
-        <% if (requests.length === 0) { %>
-            <p>No users are currently waitlisted.</p>
-        <% } else { %>
-            <ol>
-                <% for(let oneAttendeeWaitlisted of requests) { %>
-                        <li><%= oneAttendeeWaitlisted.participant.username %></li>
-                        <form method="get" action="/events/attendance-requests">
-                            <button>Accept Request</button>
-                        </form>
+                    </section>
                 <% } %>
-            </ol> 
-        <% } %>  
-    <% } else { %>
-        <% if(!userRequest) { %>
-            <form method="get" action="/events/<%= events._id %>/attendance-requests/new">
-                <button>Send Attendence Request</button>
-            </form>
-        <% } else if (userRequest.status ==="pending" || userRequest.status === "waitlisted"|| userRequest.status ==="accepted" ){ %>
-                <p>Request Status: <%= userRequest.status %></p>
-        <% } else if(userRequest.status ==="declined") { %>
-                <p>Request Status: <%= userRequest.status %></p>
-                <form method="get" action="/events/<%= events._id %>/attendance-requests/new">
-                    <button>Send Attendence Request Again</button>
-                </form>
-            <% } %> 
-        <% } %>
+            </div>
+        </section>
+    </main>
 </body>
+
 </html>
