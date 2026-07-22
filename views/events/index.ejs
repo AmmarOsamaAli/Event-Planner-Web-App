@@ -1,25 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="icon" type="image/svg+xml" href="/images/logos/icon.svg">
     <title>All Events</title>
 </head>
-<body>
-    <%- include('../partials/navbar') %>
-    
-    <h1>All Events</h1>
 
-    <% for(let oneEvent of events) { %>
-        <img src="<%= oneEvent.image %>">
-        <a href="/events/<%= oneEvent._id %>"><p>Title: <%= oneEvent.title %></p></a>
-        <p>Description: <%= oneEvent.description %></p>
-        <p>Categories: <%= oneEvent.categories %></p>
-        <p>Date: <%= oneEvent.date.toLocaleDateString('en-GB')
-        + ", " + oneEvent.date.toLocaleTimeString() %></p>
-        <P>Capactiy: <%= oneEvent.capacity %></P>
-        <p>Event Planner: <%= oneEvent.eventPlanner.username %></p>
-        <hr>
-    <% } %>
+<body class="min-h-screen bg-slate-50 text-slate-900">
+    <%- include('../partials/navbar') %>
+    <main class="mx-auto w-full max-w-7xl px-6 py-10 lg:px-10">
+        <header class="mb-10">
+            <p class="text-sm font-semibold uppercase tracking-[0.2em] text-indigo-600">Discover events</p>
+            <h1 class="mt-3 text-5xl font-extrabold tracking-tight text-slate-900">All Events</h1>
+            <p class="mt-4 max-w-2xl text-lg leading-8 text-slate-600">Explore public events happening across Bahrain.</p>
+        </header>
+
+        <% if(events.length===0){ %>
+            <section
+                class="rounded-3xl border border-dashed border-slate-300 bg-white px-8 py-16 text-center shadow-sm">
+                <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-100 text-3xl">🔎</div>
+                <h2 class="mt-6 text-2xl font-bold text-slate-900">No events available</h2>
+                <p class="mt-3 text-lg text-slate-600">There are currently no public events to display.</p>
+            </section>
+        <% } else { %>
+            <section class="space-y-6">
+                <% for(let oneEvent of events) { %>
+                    <article
+                        class="grid overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-slate-200 transition duration-200 hover:-translate-y-1 hover:shadow-xl lg:grid-cols-[360px_1fr]">
+                        <div class="min-h-72 overflow-hidden bg-slate-200">
+                            <img src="<%= oneEvent.image %>" alt="<%= oneEvent.title %>"
+                                class="h-full w-full object-cover transition duration-300 hover:scale-105">
+                        </div>
+                        <div class="flex flex-col p-7 lg:p-8">
+                            <a href="/events/<%= oneEvent._id %>" class="group">
+                                <h2 class="text-3xl font-bold text-slate-900 transition group-hover:text-indigo-600"><%= oneEvent.title %></h2>
+                            </a>
+                            <p class="mt-4 line-clamp-3 text-base leading-7 text-slate-600"><%= oneEvent.description %></p>
+                            <div class="mt-5 flex flex-wrap gap-2">
+                                <% for(let category of oneEvent.categories) { %>
+                                    <span 
+                                        class="rounded-full bg-indigo-50 px-3 py-1.5 text-sm font-semibold text-indigo-700"><%= category %>
+                                    </span>
+                                <% } %>
+                            </div>
+                            <div class="mt-6 space-y-3 border-t border-slate-200 pt-5 text-base text-slate-600">
+                                <p>
+                                    <span class="font-semibold text-slate-800">Date:</span>
+                                    <%= oneEvent.date.toLocaleDateString('en-GB') + ", " +
+                                        oneEvent.date.toLocaleTimeString() %>
+                                </p>
+
+                                <p>
+                                    <span class="font-semibold text-slate-800">Capacity:</span>
+                                    <%= oneEvent.capacity %>
+                                </p>
+
+                                <p>
+                                    <span class="font-semibold text-slate-800">Event Planner:</span>
+                                    <%= oneEvent.eventPlanner.username %>
+                                </p>
+                            </div>
+
+                            <div class="mt-auto pt-7">
+                                <form method="get" action="/events/<%= oneEvent._id %>">
+                                    <button type="submit"
+                                        class="cursor-pointer rounded-xl bg-indigo-600 px-6 py-3 text-base font-semibold text-white shadow-sm transition duration-200 hover:bg-indigo-700 hover:shadow-md focus:outline-none focus:ring-4 focus:ring-indigo-200">
+                                        Event Details
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </article>
+                <% } %>
+            </section>
+        <% } %>
+    </main>
 </body>
+
 </html>
