@@ -1,7 +1,11 @@
-<nav class="sticky top-0 z-50 h-22 border-b border-slate-200 bg-white/95 shadow-md backdrop-blur">
-    <div class="mx-auto flex h-full max-w-375 items-center justify-between px-8 lg:px-12">
+<nav class="sticky top-0 z-50 h-22 w-full border-b border-slate-200 bg-white/95 shadow-md backdrop-blur">
+    <div class="relative flex h-full w-full items-center justify-between px-8 lg:px-12">
 
-        <div class="flex items-center gap-3">
+        <a href="/" class="flex shrink-0 items-center" aria-label="Evently homepage">
+            <img src="/images/logos/logo-horizontal-transparent.svg" alt="Evently" class="h-12 w-auto">
+        </a>
+
+        <div class="absolute left-1/2 flex -translate-x-1/2 items-center gap-3">
             <a href="/"
                 class="rounded-xl px-5 py-3 text-[22px] font-semibold text-slate-700 transition duration-200 hover:bg-indigo-50 hover:text-indigo-600">
                 Homepage
@@ -20,7 +24,7 @@
             <% } %>
         </div>
 
-        <div class="flex items-center gap-4">
+        <div class="flex shrink-0 items-center gap-4">
             <% if (user) { %>
                 <a href="/auth/log-out"
                     class="rounded-xl border border-red-200 px-6 py-3 text-[22px] font-semibold text-red-600 transition duration-200 hover:bg-red-50">
