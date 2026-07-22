@@ -11,11 +11,11 @@
 
 <body class="min-h-screen bg-slate-50 text-slate-900">
     <%- include('../partials/navbar') %>
-    <main class="mx-auto w-full max-w-7xl px-6 py-10 lg:px-10">
-        <header class="mb-10">
-            <p class="text-sm font-semibold uppercase tracking-[0.2em] text-indigo-600">Event participation</p>
-            <h1 class="mt-3 text-5xl font-extrabold tracking-tight text-slate-900">Attendance Requests</h1>
-            <p class="mt-4 max-w-2xl text-lg leading-8 text-slate-600">
+    <main class="mx-auto w-full max-w-4xl px-4 py-7 lg:px-7">
+        <header class="mb-7">
+            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-600">Event participation</p>
+            <h1 class="mt-2 text-3xl font-extrabold tracking-tight text-slate-900">Attendance Requests</h1>
+            <p class="mt-3 max-w-md text-xs leading-5 text-slate-600">
                 Review requests received for your events and track the requests you have sent.
             </p>
         </header>
@@ -36,41 +36,41 @@
             )
         }) %>
 
-        <section class="grid items-start gap-8 lg:grid-cols-2">
-            <section class="rounded-3xl bg-white p-7 shadow-lg ring-1 ring-slate-200">
-                <header class="flex items-center justify-between border-b border-slate-200 pb-5">
+        <section class="grid items-start gap-5 lg:grid-cols-2">
+            <section class="rounded-2xl bg-white p-5 shadow-lg ring-1 ring-slate-200">
+                <header class="flex items-center justify-between border-b border-slate-200 pb-3">
                     <div>
-                        <h2 class="text-3xl font-bold text-slate-900">Received Requests</h2>
-                        <p class="mt-2 text-base text-slate-600">Requests submitted for events you created.</p>
+                        <h2 class="text-xl font-bold text-slate-900">Received Requests</h2>
+                        <p class="mt-1.5 text-xs text-slate-600">Requests submitted for events you created.</p>
                     </div>
                     <span
-                        class="flex h-12 min-w-12 items-center justify-center rounded-full bg-indigo-100 px-3 text-lg font-bold text-indigo-700">
+                        class="flex h-8 min-w-8 items-center justify-center rounded-full bg-indigo-100 px-2 text-xs font-bold text-indigo-700">
                         <%= receivedRequests.length %>
                     </span>
                 </header>
 
                 <% if (receivedRequests.length===0) { %>
-                    <div class="py-14 text-center">
+                    <div class="py-9 text-center">
                         <div
-                            class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-100 text-3xl">
+                            class="mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-100 text-xl">
                             📥
                         </div>
 
-                        <h3 class="mt-5 text-xl font-bold text-slate-900">No received requests</h3>
-                        <p class="mt-2 text-base text-slate-600">You have not received any attendance requests.</p>
+                        <h3 class="mt-3 text-sm font-bold text-slate-900">No received requests</h3>
+                        <p class="mt-1.5 text-xs text-slate-600">You have not received any attendance requests.</p>
                     </div>
                 <% } else { %>
 
-                    <div class="mt-6 space-y-5">
+                    <div class="mt-4 space-y-3">
                         <% for(let oneRequests of receivedRequests) { %>
-                            <article class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-                                <div class="flex flex-wrap items-start justify-between gap-3">
+                            <article class="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                                <div class="flex flex-wrap items-start justify-between gap-2">
                                     <div>
-                                        <p class="text-sm font-semibold uppercase tracking-wide text-indigo-600">Request for</p>
-                                        <h3 class="mt-1 text-2xl font-bold text-slate-900"><%= oneRequests.event.title %></h3>
+                                        <p class="text-xs font-semibold uppercase tracking-wide text-indigo-600">Request for</p>
+                                        <h3 class="mt-1 text-base font-bold text-slate-900"><%= oneRequests.event.title %></h3>
                                     </div>
 
-                                    <span class="rounded-full px-3 py-1.5 text-sm font-semibold capitalize
+                                    <span class="rounded-full px-2 py-1 text-xs font-semibold capitalize
                                         <%= oneRequests.status === 'accepted' ? 'bg-emerald-100 text-emerald-700' 
                                             : oneRequests.status === 'declined'
                                             ? 'bg-red-100 text-red-700'
@@ -81,7 +81,7 @@
                                     </span>
                                 </div>
 
-                                <div class="mt-5 space-y-3 text-base text-slate-600">
+                                <div class="mt-3 space-y-2 text-xs text-slate-600">
                                     <p>
                                         <span class="font-semibold text-slate-800">From:</span>
                                         <%= oneRequests.participant.username %>
@@ -89,19 +89,19 @@
 
                                     <div>
                                         <p class="font-semibold text-slate-800">Message:</p>
-                                        <p class="mt-1 leading-7">
+                                        <p class="mt-1 leading-5">
                                             <%= oneRequests.message || "No message was included." %>
                                         </p>
                                     </div>
                                 </div>
 
-                                <div class="mt-6 flex flex-wrap gap-3 border-t border-slate-200 pt-5">
+                                <div class="mt-4 flex flex-wrap gap-2 border-t border-slate-200 pt-3">
 
                                     <% if(oneRequests.status==="declined" ) { %>
                                         <form method="post"
                                             action="/attendance-requests/<%= oneRequests._id %>/accept?_method=PUT">
                                             <button type="submit"
-                                                class="cursor-pointer rounded-xl bg-emerald-600 px-5 py-3 font-semibold text-white shadow-sm transition hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-200">
+                                                class="cursor-pointer rounded-lg bg-emerald-600 px-3 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-200">
                                                 Accept
                                             </button>
                                         </form>
@@ -112,7 +112,7 @@
                                         <form method="post"
                                             action="/attendance-requests/<%= oneRequests._id %>/accept?_method=PUT">
                                             <button type="submit"
-                                                class="cursor-pointer rounded-xl bg-emerald-600 px-5 py-3 font-semibold text-white shadow-sm transition hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-200">
+                                                class="cursor-pointer rounded-lg bg-emerald-600 px-3 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-200">
                                                 Accept
                                             </button>
                                         </form>
@@ -120,7 +120,7 @@
                                         <form method="post"
                                             action="/attendance-requests/<%= oneRequests._id %>/decline?_method=PUT">
                                             <button type="submit"
-                                                class="cursor-pointer rounded-xl border border-red-200 bg-white px-5 py-3 font-semibold text-red-600 transition hover:bg-red-50 focus:outline-none focus:ring-4 focus:ring-red-100">
+                                                class="cursor-pointer rounded-lg border border-red-200 bg-white px-3 py-2 text-xs font-semibold text-red-600 transition hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-100">
                                                 Decline
                                             </button>
                                         </form>
@@ -130,7 +130,7 @@
                                         <form method="post"
                                             action="/attendance-requests/<%= oneRequests._id %>/decline?_method=PUT">
                                             <button type="submit"
-                                                class="cursor-pointer rounded-xl border border-red-200 bg-white px-5 py-3 font-semibold text-red-600 transition hover:bg-red-50 focus:outline-none focus:ring-4 focus:ring-red-100">
+                                                class="cursor-pointer rounded-lg border border-red-200 bg-white px-3 py-2 text-xs font-semibold text-red-600 transition hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-100">
                                                 Decline
                                             </button>
                                         </form>
@@ -142,40 +142,40 @@
                 <% } %>
             </section>
 
-            <section class="rounded-3xl bg-white p-7 shadow-lg ring-1 ring-slate-200">
-                <header class="flex items-center justify-between border-b border-slate-200 pb-5">
+            <section class="rounded-2xl bg-white p-5 shadow-lg ring-1 ring-slate-200">
+                <header class="flex items-center justify-between border-b border-slate-200 pb-3">
                     <div>
-                        <h2 class="text-3xl font-bold text-slate-900">Sent Requests</h2>
-                        <p class="mt-2 text-base text-slate-600">Requests you submitted to other event planners.</p>
+                        <h2 class="text-xl font-bold text-slate-900">Sent Requests</h2>
+                        <p class="mt-1.5 text-xs text-slate-600">Requests you submitted to other event planners.</p>
                     </div>
                     <span
-                        class="flex h-12 min-w-12 items-center justify-center rounded-full bg-violet-100 px-3 text-lg font-bold text-violet-700">
+                        class="flex h-8 min-w-8 items-center justify-center rounded-full bg-violet-100 px-2 text-xs font-bold text-violet-700">
                         <%= sentRequests.length %>
                     </span>
                 </header>
 
                 <% if (sentRequests.length===0) { %>
-                    <div class="py-14 text-center">
+                    <div class="py-9 text-center">
                         <div
-                            class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-100 text-3xl">
+                            class="mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-violet-100 text-xl">
                             📤
                         </div>
-                        <h3 class="mt-5 text-xl font-bold text-slate-900">No sent requests</h3>
-                        <p class="mt-2 text-base text-slate-600">You have not sent any attendance requests.</p>
+                        <h3 class="mt-3 text-sm font-bold text-slate-900">No sent requests</h3>
+                        <p class="mt-1.5 text-xs text-slate-600">You have not sent any attendance requests.</p>
                     </div>
                 <% } else { %>
-                    <div class="mt-6 space-y-5">
+                    <div class="mt-4 space-y-3">
                     <% for(let oneRequests of sentRequests) { %>
-                        <article class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-                            <div class="flex flex-wrap items-start justify-between gap-3">
+                        <article class="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                            <div class="flex flex-wrap items-start justify-between gap-2">
                                 <div>
-                                    <p class="text-sm font-semibold uppercase tracking-wide text-violet-600">
+                                    <p class="text-xs font-semibold uppercase tracking-wide text-violet-600">
                                         Request sent to
                                     </p>
-                                    <h3 class="mt-1 text-2xl font-bold text-slate-900"><%= oneRequests.event.title %></h3>
+                                    <h3 class="mt-1 text-base font-bold text-slate-900"><%= oneRequests.event.title %></h3>
                                 </div>
 
-                                <span class="rounded-full px-3 py-1.5 text-sm font-semibold capitalize
+                                <span class="rounded-full px-2 py-1 text-xs font-semibold capitalize
                                     <%= oneRequests.status === 'accepted'
                                         ? 'bg-emerald-100 text-emerald-700'
                                         : oneRequests.status === 'declined'
@@ -187,10 +187,10 @@
                                 </span>
                             </div>
 
-                            <div class="mt-5">
-                                <p class="font-semibold text-slate-800">Message:</p>
+                            <div class="mt-3">
+                                <p class="text-xs font-semibold text-slate-800">Message:</p>
                                 <p
-                                    class="mt-1 text-base leading-7 text-slate-600">
+                                    class="mt-1 text-xs leading-5 text-slate-600">
                                     <%= oneRequests.message || "No message was included." %>
                                 </p>
                             </div>
@@ -199,13 +199,13 @@
                                 oneRequests.status==="waitlisted" || oneRequests.status==="declined"
                                 ) { %>
                                 <div
-                                    class="mt-6 flex flex-wrap gap-3 border-t border-slate-200 pt-5">
+                                    class="mt-4 flex flex-wrap gap-2 border-t border-slate-200 pt-3">
                                     <% if( oneRequests.status==="pending" ||
                                         oneRequests.status==="waitlisted" ) { %>
                                         <form method="post"
                                             action="/attendance-requests/<%= oneRequests._id %>/cancel?_method=DELETE">
                                             <button type="submit"
-                                                class="cursor-pointer rounded-xl border border-red-200 bg-white px-5 py-3 font-semibold text-red-600 transition hover:bg-red-50 focus:outline-none focus:ring-4 focus:ring-red-100">
+                                                class="cursor-pointer rounded-lg border border-red-200 bg-white px-3 py-2 text-xs font-semibold text-red-600 transition hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-100">
                                                 Cancel Request
                                             </button>
                                         </form>
@@ -213,7 +213,7 @@
                                         <form method="get"
                                             action="/events/<%= oneRequests.event._id %>/attendance-requests/new">
                                             <button type="submit"
-                                                class="cursor-pointer rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white shadow-sm transition hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-200">
+                                                class="cursor-pointer rounded-lg bg-indigo-600 px-3 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-200">
                                                 Send Attendance Request Again
                                             </button>
                                         </form>

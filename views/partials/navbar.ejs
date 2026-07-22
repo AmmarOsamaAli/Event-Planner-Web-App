@@ -1,43 +1,43 @@
-<nav class="sticky top-0 z-50 h-22 w-full border-b border-slate-200 bg-white/95 shadow-md backdrop-blur">
-    <div class="relative flex h-full w-full items-center justify-between px-8 lg:px-12">
+<nav class="sticky top-0 z-50 h-14.75 w-full border-b border-slate-200 bg-white/95 shadow-md backdrop-blur">
+    <div class="relative flex h-full w-full items-center justify-between px-5.25 lg:px-8">
 
         <a href="/" class="flex shrink-0 items-center" aria-label="Evently homepage">
-            <img src="/images/logos/logo-horizontal-transparent.svg" alt="Evently" class="h-12 w-auto">
+            <img src="/images/logos/logo-horizontal-transparent.svg" alt="Evently" class="h-8 w-auto">
         </a>
 
-        <div class="absolute left-1/2 flex -translate-x-1/2 items-center gap-3">
+        <div class="absolute left-1/2 flex -translate-x-1/2 items-center gap-2">
             <a href="/"
-                class="rounded-xl px-5 py-3 text-[22px] font-semibold text-slate-700 transition duration-200 hover:bg-indigo-50 hover:text-indigo-600">
+                class="rounded-lg px-3.25 py-2 text-[15px] font-semibold text-slate-700 transition duration-200 hover:bg-indigo-50 hover:text-indigo-600">
                 Homepage
             </a>
 
             <% if (user) { %>
                 <a href="/dashboard"
-                    class="rounded-xl px-5 py-3 text-[22px] font-semibold text-slate-700 transition duration-200 hover:bg-indigo-50 hover:text-indigo-600">
+                    class="rounded-lg px-3.25 py-2 text-[15px] font-semibold text-slate-700 transition duration-200 hover:bg-indigo-50 hover:text-indigo-600">
                     Dashboard
                 </a>
 
                 <a href="/profile"
-                    class="rounded-xl px-5 py-3 text-[22px] font-semibold text-slate-700 transition duration-200 hover:bg-indigo-50 hover:text-indigo-600">
+                    class="rounded-lg px-3.25 py-2 text-[15px] font-semibold text-slate-700 transition duration-200 hover:bg-indigo-50 hover:text-indigo-600">
                     Profile
                 </a>
             <% } %>
         </div>
 
-        <div class="flex shrink-0 items-center gap-4">
+        <div class="flex shrink-0 items-center gap-2.75">
             <% if (user) { %>
                 <a href="/auth/log-out"
-                    class="rounded-xl border border-red-200 px-6 py-3 text-[22px] font-semibold text-red-600 transition duration-200 hover:bg-red-50">
+                    class="rounded-lg border border-red-200 px-4 py-2 text-[15px] font-semibold text-red-600 transition duration-200 hover:bg-red-50">
                     Logout
                 </a>
             <% } else { %>
                 <a href="/auth/sign-up"
-                    class="rounded-xl px-5 py-3 text-[22px] font-semibold text-slate-700 transition duration-200 hover:bg-slate-100">
+                    class="rounded-lg px-3.25 py-2 text-[15px] font-semibold text-slate-700 transition duration-200 hover:bg-slate-100">
                     Sign up
                 </a>
 
                 <a href="/auth/log-in"
-                    class="rounded-xl bg-indigo-600 px-7 py-3 text-[22px] font-semibold text-white shadow-md transition duration-200 hover:bg-indigo-700">
+                    class="rounded-lg bg-indigo-600 px-4.75 py-2 text-[15px] font-semibold text-white shadow-md transition duration-200 hover:bg-indigo-700">
                     Login
                 </a>
             <% } %>
