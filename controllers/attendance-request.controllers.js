@@ -186,7 +186,7 @@ router.post('/events/:eventId/attendance-requests', isSignedIn, async (req, res)
                 })
             }
         }
-        res.redirect('/events')
+        res.redirect('/events/attendance-requests')
 
     } catch (error) {
         console.log("Error:", error)

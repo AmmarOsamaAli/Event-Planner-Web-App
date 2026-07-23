@@ -64,7 +64,7 @@ router.post('/', isSignedIn, upload.single("image"), async (req, res) => {
             attendeesList: [],
             eventPlanner: req.session.user._id
         })
-        res.redirect('/events')
+        res.redirect('/events/my-events')
 
     } catch (error) {
         deleteUploadedFile(req.file)
@@ -178,7 +178,7 @@ router.put('/:eventId', isSignedIn, upload.single("image"), async (req, res) => 
         return res.status(500).send("Could not update event")
     }
 
-    res.redirect('/events')
+    res.redirect('/events/my-events')
 })
 
 
